@@ -1,0 +1,486 @@
+/* =============================================
+   VARIABLES Y BASE
+   ============================================= */
+:root {
+    --verde: #006400;
+    --verde-oscuro: #004d00;
+    --verde-medio: #0a6b2f;
+    --verde-claro: #0d8137;
+    --verde-footer: #066e2a;
+    --amarillo: #FFD700;
+    --amarillo-oscuro: #f5d742;
+    --bg: #f4f7f6;
+    --text: #333;
+    --white: #ffffff;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+}
+
+/* =============================================
+   LOGIN (Acudientes.html)
+   ============================================= */
+.login-page {
+    min-height: 100vh;
+   background-image:
+        url("Colegio.JPG");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-card .escudo-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+}
+
+.login-title {
+    color: var(--verde);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.2rem;
+}
+
+.login-subtitle {
+    color: #666;
+    font-size: 0.88rem;
+}
+
+.login-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--verde), var(--amarillo));
+    border-radius: 99px;
+    margin-bottom: 1.5rem;
+}
+
+.form-control:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(0,100,0,0.12);
+}
+
+.btn-ingresar {
+    background-color: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-ingresar:hover {
+    background-color: var(--amarillo);
+    color: var(--verde-oscuro);
+}
+
+.forgot-link {
+    color: var(--verde);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+/* =============================================
+   NAVBAR (Inicio.html)
+   ============================================= */
+.navbar-colegio { background-color: var(--verde-medio); }
+
+.navbar-colegio .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.5rem 0.8rem !important;
+}
+
+.navbar-colegio .nav-link:hover { color: var(--amarillo) !important; }
+
+.navbar-colegio .navbar-toggler { border-color: rgba(255,255,255,0.3); }
+
+.navbar-colegio .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.btn-acceso {
+    background: white;
+    color: #0a3c63;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.btn-registrarse {
+    background: var(--amarillo);
+    color: #543d00;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.btn-acceso:hover, .btn-registrarse:hover { filter: brightness(0.9); }
+
+.escudo-nav {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+}
+
+/* =============================================
+   SECCIÓN PASTORAL (Inicio.html)
+   ============================================= */
+.pastoral-section {
+    padding: 4rem 0;
+    background: #f9fafb;
+}
+
+.pastoral-section h2 {
+    color: var(--verde);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.pastoral-section p {
+    line-height: 1.8;
+    color: #444;
+    font-size: 1rem;
+}
+
+.pastoral-img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 380px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.escudo-pastoral {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    display: block;         
+    margin-left: auto;      
+    margin-right: auto;
+}
+
+/* =============================================
+   BARRA TÍTULO (Inicio.html)
+   ============================================= */
+.barra-titulo {
+    background-color: var(--verde-claro);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: white;
+}
+
+.barra-titulo h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* =============================================
+   CARDS PASTORAL (Inicio.html)
+   ============================================= */
+.cards-section {
+    padding: 3rem 0;
+    background: white;
+}
+
+.pastoral-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.2s;
+    border-top: 4px solid var(--verde);
+}
+
+.pastoral-card:hover { transform: translateY(-4px); }
+
+.pastoral-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.pastoral-card .card-body { padding: 1.5rem; }
+
+.pastoral-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--verde);
+    margin-bottom: 0.75rem;
+}
+
+.pastoral-card p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* =============================================
+   FOOTER (Inicio.html)
+   ============================================= */
+.footer {
+    background-color: var(--verde-footer);
+    color: white;
+    padding: 3rem 0 0;
+}
+
+.footer h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; }
+
+.footer p, .footer a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+}
+
+.footer a:hover { color: var(--amarillo); }
+.footer ul { list-style: none; padding: 0; }
+.footer ul li { margin-bottom: 0.4rem; }
+
+.footer-divider {
+    height: 4px;
+    background: linear-gradient(90deg, var(--verde-claro), var(--amarillo));
+    margin: 2rem 0 0;
+}
+
+.footer-bottom {
+    background: rgba(0,0,0,0.2);
+    padding: 1rem 0;
+}
+
+.footer-bottom p, .footer-bottom a {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+}
+
+.footer-bottom a:hover { color: var(--amarillo); }
+
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 1rem;
+    margin-right: 6px;
+    transition: background 0.2s;
+}
+
+.social-icons a:hover { background: var(--amarillo); color: var(--verde); }
+
+.footer-map iframe { border-radius: 10px; width: 100%; }
+
+.escudo-footer {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+    margin-bottom: 1.75rem;
+}
+
+/* =============================================
+   MENSAJERÍA - SIDEBAR (mensajeria.html)
+   ============================================= */
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background-color: var(--verde);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    background-color: var(--verde-oscuro);
+    padding: 1rem 1.2rem;
+}
+
+.sidebar-header .escudo-logo {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+}
+
+.sidebar-header span {
+    color: white;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.75);
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    border-radius: 0;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: var(--amarillo);
+    color: var(--verde-oscuro) !important;
+    font-weight: 600;
+}
+
+.user-bar {
+    margin-top: auto;
+    padding: 0.9rem 1.2rem;
+    background: rgba(0,0,0,0.2);
+}
+
+.user-bar .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--amarillo);
+    color: var(--verde-oscuro);
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-bar .user-name {
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.user-bar .user-status {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.72rem;
+}
+
+/* =============================================
+   MENSAJERÍA - TOPBAR
+   ============================================= */
+.top-bar {
+    background-color: var(--verde);
+    padding: 0.9rem 1.5rem;
+}
+
+.top-bar h2 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.notif-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.notif-dot {
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 8px; height: 8px;
+    background: var(--amarillo);
+    border-radius: 50%;
+    border: 1.5px solid var(--verde);
+}
+
+.welcome-text {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.88rem;
+}
+
+/* =============================================
+   MENSAJERÍA - TARJETAS
+   ============================================= */
+.message-card {
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid var(--amarillo);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1) !important;
+}
+
+.sender-name { font-size: 0.88rem; font-weight: 600; color: var(--verde); }
+.msg-subject { font-size: 0.9rem; font-weight: 600; color: #222; margin: 3px 0; }
+.msg-preview { font-size: 0.82rem; color: #666; margin: 0; }
+.msg-date    { font-size: 0.78rem; color: #999; white-space: nowrap; }
+
+.unread-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.badge-math  { background: #e8f5e9 !important; color: #006400 !important; }
+.badge-coord { background: #fff3e0 !important; color: #e65100 !important; }
+.badge-salud { background: #e3f2fd !important; color: #1565c0 !important; }
+
+.btn-compose {
+    background-color: var(--verde);
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+.btn-compose:hover { background-color: var(--verde-oscuro); color: white; }
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+    }
+}
