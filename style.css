@@ -100,6 +100,86 @@ body {
 .forgot-link:hover { text-decoration: underline; }
 
 /* =============================================
+   LOGIN (Estudiantes.html)
+   ============================================= */
+.login-page {
+   min-height: 100vh;
+   background-image:
+        url("login-estudiante.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-card .escudo-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+}
+
+.login-title {
+    color: var(--verde);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.2rem;
+}
+
+.login-subtitle {
+    color: #666;
+    font-size: 0.88rem;
+}
+
+.login-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--verde), var(--amarillo));
+    border-radius: 99px;
+    margin-bottom: 1.5rem;
+}
+
+.form-control:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(0,100,0,0.12);
+}
+
+.btn-ingresar {
+    background-color: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-ingresar:hover {
+    background-color: var(--amarillo);
+    color: var(--verde-oscuro);
+}
+
+.forgot-link {
+    color: var(--verde);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+/* =============================================
    NAVBAR (Inicio.html)
    ============================================= */
 .navbar-colegio { background-color: var(--verde-medio); }
