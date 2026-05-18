@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción - Colegio Yermo y Parres</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-colegio sticky-top">
+    <div class="container-xl">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="Inicio.html">
+            <img src="escudo.png" alt="Escudo" class="escudo-nav">
+            <span class="text-white fw-bold" style="font-size:0.95rem;">Yermo y Parres</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav mx-auto gap-1">
+                <li class="nav-item"><a class="nav-link" href="Inicio.html">Mi colegio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Circulares</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Admisiones</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Plantel</a></li>
+                <li class="nav-item"><a class="nav-link" href="Portal-estudiante.html">Alumnos</a></li>
+                <li class="nav-item"><a class="nav-link" href="Portal-acudiente.html">Acudientes</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contáctenos</a></li>
+            </ul>
+            <div class="d-flex gap-2 mt-2 mt-lg-0">
+                <a href="#" class="btn-registrarse">Registrarse</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-inscripcion">
+    <div class="hero-badge">Admisiones 2025</div>
+    <h1>Formulario de Inscripción</h1>
+    <p>Complete todos los campos para iniciar el proceso de admisión de su hijo/a.</p>
+    <a href="Inicio.html" class="btn-volver">
+    <i class="bi bi-arrow-left-circle me-1"></i> Volver al inicio
+</a>
+</div>
+
+<!-- STEPS BAR -->
+<div class="steps-bar">
+    <div class="steps-container px-3">
+        <div class="step active" id="step-ind-1">
+            <div class="step-num">1</div>
+            <span class="step-label">Estudiante</span>
+        </div>
+        <div class="step" id="step-ind-2">
+            <div class="step-num">2</div>
+            <span class="step-label">Acudiente</span>
+        </div>
+        <div class="step" id="step-ind-3">
+            <div class="step-num">3</div>
+            <span class="step-label">Salud</span>
+        </div>
+        <div class="step" id="step-ind-4">
+            <div class="step-num">4</div>
+            <span class="step-label">Ubicación</span>
+        </div>
+        <div class="step" id="step-ind-5">
+            <div class="step-num">5</div>
+            <span class="step-label">Documentos</span>
+        </div>
+    </div>
+</div>
+
+<!-- FORMULARIO -->
+<div class="form-wrapper">
+
+    <!-- PASO 1: DATOS DEL ESTUDIANTE -->
+    <div class="form-section active" id="paso-1">
+        <div class="section-header">
+            <i class="bi bi-person-badge"></i>
+            <h3>Datos del Estudiante</h3>
+        </div>
+        <div class="section-body">
+            <div class="info-box">
+                <i class="bi bi-info-circle-fill"></i>
+                <span>Complete los datos personales del alumno que desea inscribir. Todos los campos marcados con <strong>*</strong> son obligatorios.</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Primer nombre <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. Juan David" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Segundo nombre</label>
+                    <input type="text" class="form-control" placeholder="Ej. Andrés">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Primer apellido <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. García" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Segundo apellido <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. López" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Tipo de documento <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Tarjeta de identidad</option>
+                        <option>Registro civil</option>
+                        <option>Pasaporte</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número de documento <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. 1023456789" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de nacimiento <span class="req">*</span></label>
+                    <input type="date" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Género <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Masculino</option>
+                        <option>Femenino</option>
+                        <option>Prefiero no decirlo</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Grado al que aspira <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Preescolar (Transición)</option>
+                        <option>Primero</option>
+                        <option>Segundo</option>
+                        <option>Tercero</option>
+                        <option>Cuarto</option>
+                        <option>Quinto</option>
+                        <option>Sexto</option>
+                        <option>Séptimo</option>
+                        <option>Octavo</option>
+                        <option>Noveno</option>
+                        <option>Décimo</option>
+                        <option>Undécimo</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Colegio de procedencia</label>
+                    <input type="text" class="form-control" placeholder="Nombre del colegio anterior">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">¿Requiere transporte escolar?</label>
+                    <div class="d-flex gap-4 mt-1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="transporte" id="trans-si" value="si">
+                            <label class="form-check-label" for="trans-si">Sí</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="transporte" id="trans-no" value="no" checked>
+                            <label class="form-check-label" for="trans-no">No</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn-next" onclick="irPaso(2)">Siguiente <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASO 2: DATOS DEL ACUDIENTE -->
+    <div class="form-section" id="paso-2">
+        <div class="section-header">
+            <i class="bi bi-people"></i>
+            <h3>Datos del Acudiente / Padre o Madre</h3>
+        </div>
+        <div class="section-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre completo <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Nombre y apellidos" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Parentesco <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Padre</option>
+                        <option>Madre</option>
+                        <option>Abuelo/a</option>
+                        <option>Tío/a</option>
+                        <option>Otro acudiente</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Tipo de documento <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Cédula de ciudadanía</option>
+                        <option>Cédula de extranjería</option>
+                        <option>Pasaporte</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número de documento <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. 79456123" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono celular <span class="req">*</span></label>
+                    <input type="tel" class="form-control" placeholder="Ej. 3001234567" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono alternativo</label>
+                    <input type="tel" class="form-control" placeholder="Ej. 6012345678">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Correo electrónico <span class="req">*</span></label>
+                    <input type="email" class="form-control" placeholder="correo@ejemplo.com" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ocupación / Profesión</label>
+                    <input type="text" class="form-control" placeholder="Ej. Ingeniero, Docente...">
+                </div>
+            </div>
+
+            <div class="form-divider"></div>
+            <p class="fw-bold mb-3" style="font-size:0.92rem;">Acudiente secundario (opcional)</p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre completo</label>
+                    <input type="text" class="form-control" placeholder="Nombre y apellidos">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" placeholder="Ej. 3109876543">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Parentesco</label>
+                    <select class="form-select">
+                        <option value="">Seleccionar...</option>
+                        <option>Padre</option>
+                        <option>Madre</option>
+                        <option>Abuelo/a</option>
+                        <option>Tío/a</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-prev" onclick="irPaso(1)"><i class="bi bi-arrow-left"></i> Anterior</button>
+                <button class="btn-next" onclick="irPaso(3)">Siguiente <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASO 3: INFORMACIÓN MÉDICA -->
+    <div class="form-section" id="paso-3">
+        <div class="section-header">
+            <i class="bi bi-heart-pulse"></i>
+            <h3>Información Médica y de Salud</h3>
+        </div>
+        <div class="section-body">
+            <div class="info-box">
+                <i class="bi bi-shield-plus"></i>
+                <span>Esta información es confidencial y solo será usada en caso de emergencia médica.</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">EPS / Entidad de salud <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. Compensar, Sura, Nueva EPS" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número de afiliación</label>
+                    <input type="text" class="form-control" placeholder="Número de carné EPS">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Tipo de sangre <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>O+</option><option>O-</option>
+                        <option>A+</option><option>A-</option>
+                        <option>B+</option><option>B-</option>
+                        <option>AB+</option><option>AB-</option>
+                        <option>No sé</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">¿Tiene alguna discapacidad?</label>
+                    <select class="form-select">
+                        <option value="">Seleccionar...</option>
+                        <option>No</option>
+                        <option>Física</option>
+                        <option>Visual</option>
+                        <option>Auditiva</option>
+                        <option>Cognitiva</option>
+                        <option>Otra</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Alergias conocidas</label>
+                    <input type="text" class="form-control" placeholder="Ej. Polen, mariscos, penicilina... (deje en blanco si no aplica)">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Medicamentos que consume regularmente</label>
+                    <textarea class="form-control" rows="2" placeholder="Indique nombre del medicamento y dosis (deje en blanco si no aplica)"></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Condiciones médicas especiales o diagnósticos</label>
+                    <textarea class="form-control" rows="2" placeholder="Ej. Asma, epilepsia, diabetes... (deje en blanco si no aplica)"></textarea>
+                </div>
+                <div class="col-12">
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" id="autorizacion-medica">
+                        <label class="form-check-label" for="autorizacion-medica">
+                            Autorizo al colegio para brindar primeros auxilios y contactar servicios médicos de emergencia en caso necesario.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-prev" onclick="irPaso(2)"><i class="bi bi-arrow-left"></i> Anterior</button>
+                <button class="btn-next" onclick="irPaso(4)">Siguiente <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASO 4: UBICACIÓN -->
+    <div class="form-section" id="paso-4">
+        <div class="section-header">
+            <i class="bi bi-geo-alt"></i>
+            <h3>Ubicación y Transporte</h3>
+        </div>
+        <div class="section-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Localidad de Bogotá <span class="req">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option>Usaquén</option><option>Chapinero</option>
+                        <option>Santa Fe</option><option>San Cristóbal</option>
+                        <option>Usme</option><option>Tunjuelito</option>
+                        <option>Bosa</option><option>Kennedy</option>
+                        <option>Fontibón</option><option>Engativá</option>
+                        <option>Suba</option><option>Barrios Unidos</option>
+                        <option>Teusaquillo</option><option>Los Mártires</option>
+                        <option>Antonio Nariño</option><option>Puente Aranda</option>
+                        <option>La Candelaria</option><option>Rafael Uribe Uribe</option>
+                        <option>Ciudad Bolívar</option><option>Sumapaz</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Barrio <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. Minuto de Dios" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Dirección de residencia <span class="req">*</span></label>
+                    <input type="text" class="form-control" placeholder="Ej. Calle 76 #81-33" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Estrato socioeconómico</label>
+                    <select class="form-select">
+                        <option value="">Seleccionar...</option>
+                        <option>1</option><option>2</option><option>3</option>
+                        <option>4</option><option>5</option><option>6</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ciudad / Municipio</label>
+                    <input type="text" class="form-control" value="Bogotá D.C." placeholder="Bogotá D.C.">
+                </div>
+                <div class="col-12">
+                    <div class="form-divider"></div>
+                    <label class="form-label">¿Requiere ruta escolar?</label>
+                    <div class="d-flex gap-4 mt-1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ruta" id="ruta-si" value="si">
+                            <label class="form-check-label" for="ruta-si">Sí</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ruta" id="ruta-no" value="no" checked>
+                            <label class="form-check-label" for="ruta-no">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" id="ruta-detalle" style="display:none;">
+                    <label class="form-label">Punto de referencia para la ruta</label>
+                    <input type="text" class="form-control" placeholder="Ej. Parque cercano, supermercado...">
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-prev" onclick="irPaso(3)"><i class="bi bi-arrow-left"></i> Anterior</button>
+                <button class="btn-next" onclick="irPaso(5)">Siguiente <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASO 5: DOCUMENTOS -->
+    <div class="form-section" id="paso-5">
+        <div class="section-header">
+            <i class="bi bi-folder2-open"></i>
+            <h3>Documentos Requeridos</h3>
+        </div>
+        <div class="section-body">
+            <div class="info-box">
+                <i class="bi bi-info-circle-fill"></i>
+                <span>Adjunte los documentos en formato <strong>PDF, JPG o PNG</strong>. Tamaño máximo por archivo: 5MB.</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label">Registro civil o tarjeta de identidad <span class="req">*</span></label>
+                    <div class="upload-zone">
+                        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="mostrarNombre(this,'nombre-doc1')">
+                        <i class="bi bi-cloud-upload"></i>
+                        <p><strong>Haga clic</strong> o arrastre el archivo aquí</p>
+                        <p class="mt-1">PDF, JPG, PNG — máx. 5MB</p>
+                        <div class="file-name" id="nombre-doc1"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Foto reciente del estudiante <span class="req">*</span></label>
+                    <div class="upload-zone">
+                        <input type="file" accept=".jpg,.jpeg,.png" onchange="mostrarNombre(this,'nombre-doc2')">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <p><strong>Haga clic</strong> o arrastre la foto aquí</p>
+                        <p class="mt-1">JPG, PNG — fondo blanco preferible</p>
+                        <div class="file-name" id="nombre-doc2"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Boletín de notas del año anterior</label>
+                    <div class="upload-zone">
+                        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="mostrarNombre(this,'nombre-doc3')">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <p><strong>Haga clic</strong> o arrastre el archivo aquí</p>
+                        <p class="mt-1">PDF, JPG, PNG — máx. 5MB</p>
+                        <div class="file-name" id="nombre-doc3"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Documento del acudiente (cédula)</label>
+                    <div class="upload-zone">
+                        <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="mostrarNombre(this,'nombre-doc4')">
+                        <i class="bi bi-person-vcard"></i>
+                        <p><strong>Haga clic</strong> o arrastre el archivo aquí</p>
+                        <p class="mt-1">PDF, JPG, PNG — máx. 5MB</p>
+                        <div class="file-name" id="nombre-doc4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-divider"></div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="terminos" required>
+                <label class="form-check-label" for="terminos">
+                    Acepto la <a href="#" style="color:var(--verde);">política de tratamiento de datos personales</a> del Colegio Yermo y Parres. <span class="req">*</span>
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="veracidad">
+                <label class="form-check-label" for="veracidad">
+                    Certifico que la información suministrada es verídica y completa.
+                </label>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-prev" onclick="irPaso(4)"><i class="bi bi-arrow-left"></i> Anterior</button>
+                <button class="btn-submit" onclick="enviarFormulario()">
+                    <i class="bi bi-send-check"></i> Enviar inscripción
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÉXITO -->
+    <div class="success-card" id="exito">
+        <div class="success-icon">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h2>¡Inscripción enviada!</h2>
+        <p>Hemos recibido su solicitud correctamente. Nos comunicaremos con usted en los próximos días hábiles para continuar el proceso de admisión.</p>
+        <a href="Inicio.html" class="btn-inicio"><i class="bi bi-house me-2"></i>Volver al inicio</a>
+    </div>
+
+</div>
+
+<!-- FOOTER MINI -->
+<footer class="footer-mini">
+    © 2025 <span>Yermo y Parres</span> · Todos los derechos reservados
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let pasoActual = 1;
+    const totalPasos = 5;
+
+    function irPaso(n) {
+        document.getElementById('paso-' + pasoActual).classList.remove('active');
+        document.getElementById('step-ind-' + pasoActual).classList.remove('active');
+        document.getElementById('step-ind-' + pasoActual).classList.add('done');
+
+        pasoActual = n;
+
+        document.getElementById('paso-' + pasoActual).classList.add('active');
+        document.getElementById('step-ind-' + pasoActual).classList.add('active');
+        document.getElementById('step-ind-' + pasoActual).classList.remove('done');
+
+        // Marcar anteriores como done
+        for (let i = 1; i < n; i++) {
+            document.getElementById('step-ind-' + i).classList.add('done');
+            document.getElementById('step-ind-' + i).classList.remove('active');
+        }
+        // Limpiar siguientes
+        for (let i = n + 1; i <= totalPasos; i++) {
+            document.getElementById('step-ind-' + i).classList.remove('done', 'active');
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function mostrarNombre(input, id) {
+        const el = document.getElementById(id);
+        el.textContent = input.files[0] ? '✓ ' + input.files[0].name : '';
+    }
+
+    function enviarFormulario() {
+        const terminos = document.getElementById('terminos').checked;
+        if (!terminos) {
+            alert('Debe aceptar la política de tratamiento de datos para continuar.');
+            return;
+        }
+        // Ocultar todos los pasos
+        for (let i = 1; i <= totalPasos; i++) {
+            const sec = document.getElementById('paso-' + i);
+            if (sec) sec.classList.remove('active');
+        }
+        // Marcar todos como done
+        for (let i = 1; i <= totalPasos; i++) {
+            document.getElementById('step-ind-' + i).classList.add('done');
+            document.getElementById('step-ind-' + i).classList.remove('active');
+        }
+        document.getElementById('exito').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Mostrar/ocultar detalle ruta
+    document.querySelectorAll('input[name="ruta"]').forEach(r => {
+        r.addEventListener('change', function() {
+            document.getElementById('ruta-detalle').style.display =
+                this.value === 'si' ? 'block' : 'none';
+        });
+    });
+</script>
+</body>
+</html>
