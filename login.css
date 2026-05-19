@@ -1,0 +1,134 @@
+/* =============================================
+   LOGIN.CSS
+   Pantallas de ingreso: acudientes, estudiantes y docentes
+   Depende de: global.css
+   ============================================= */
+
+/* ── Fondos de login por rol ── */
+.login-acudiente {
+    min-height: 100vh;
+    background-image: url("../Colegio.JPG");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-estudiante {
+    min-height: 100vh;
+    background-image: url("../login-estudiante.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Vista login docentes */
+#vista-login {
+    min-height: 100vh;
+    background-image: url("../Colegio.JPG");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Tarjeta de login ── */
+.login-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-card .escudo-logo,
+.escudo-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+}
+
+.login-title {
+    color: var(--verde);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.2rem;
+}
+
+.login-subtitle {
+    color: #666;
+    font-size: 0.88rem;
+}
+
+.login-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--verde), var(--amarillo));
+    border-radius: 99px;
+    margin-bottom: 1.5rem;
+}
+
+.role-badge {
+    display: inline-block;
+    background: var(--amarillo);
+    color: var(--verde-oscuro);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.25rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+}
+
+/* ── Botones de login ── */
+.btn-ingresar {
+    background-color: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.btn-ingresar:hover {
+    background-color: var(--amarillo);
+    color: var(--verde-oscuro);
+}
+
+.forgot-link {
+    color: var(--verde);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+.btn-volver {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--verde);
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-volver:hover { text-decoration: underline; color: var(--verde); }

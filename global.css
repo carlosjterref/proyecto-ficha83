@@ -1,0 +1,42 @@
+/* =============================================
+   GLOBAL.CSS
+   Variables, reset y estilos base
+   Debe cargarse PRIMERO en todos los HTML
+   ============================================= */
+
+:root {
+    --verde: #006400;
+    --verde-oscuro: #004d00;
+    --verde-medio: #0a6b2f;
+    --verde-claro: #0d8137;
+    --verde-footer: #066e2a;
+    --amarillo: #FFD700;
+    --amarillo-oscuro: #f5d742;
+    --bg: #f4f7f6;
+    --text: #333;
+    --white: #ffffff;
+    --verde-claro-form: #e8f5eb;
+    --amarillo-claro: #fdf6e0;
+    --borde: #d0ddd2;
+    --sombra: 0 4px 24px rgba(26,92,42,0.10);
+    --texto-suave: #5a5a5a;
+
+    /* Alias usados en inscripcion y docentes */
+    --blanco: #ffffff;
+    --gris: #f4f7f6;
+    --texto: #333;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Focus global para inputs */
+.form-control:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(0,100,0,0.12);
+}

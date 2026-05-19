@@ -1,0 +1,106 @@
+/* =============================================
+   DOCENTES.CSS
+   Dashboard del portal de docentes:
+   tabla de notas, cursos, secciones
+   Depende de: global.css, components.css, login.css
+   ============================================= */
+
+body { font-family: 'Lato', sans-serif; }
+
+/* ── DASHBOARD (vista principal) ── */
+#vista-dashboard {
+    display: none;
+    min-height: 100vh;
+    background: var(--bg);
+    flex-direction: row;
+}
+
+/* ── SECCIONES DEL DASHBOARD ── */
+.dash-section { display: none; animation: fadeUp 0.3s ease; }
+.dash-section.active { display: block; }
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TARJETAS DE CURSO ── */
+.curso-card {
+    border: 1.5px solid var(--borde);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+}
+
+.curso-card:hover {
+    border-color: var(--verde);
+    box-shadow: 0 4px 12px rgba(0,100,0,0.1);
+    transform: translateY(-2px);
+}
+
+.curso-nombre { font-weight: 700; color: var(--verde); font-size: 0.95rem; }
+.curso-info { font-size: 0.82rem; color: #777; margin-top: 2px; }
+
+.curso-badge {
+    background: #e8f5eb;
+    color: var(--verde);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+/* ── TABLA DE ESTUDIANTES Y NOTAS ── */
+.tabla-estudiantes { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+.tabla-estudiantes th {
+    background: var(--verde);
+    color: white;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+.tabla-estudiantes td { padding: 0.7rem 1rem; border-bottom: 1px solid #f0f0f0; }
+.tabla-estudiantes tr:hover td { background: #f9fafb; }
+
+.nota-input {
+    width: 65px;
+    border: 1.5px solid var(--borde);
+    border-radius: 6px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.88rem;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.nota-input:focus {
+    border-color: var(--verde);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,100,0,0.1);
+}
+
+.btn-guardar-notas {
+    background: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.55rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-guardar-notas:hover { background: var(--verde-medio); transform: translateY(-1px); }
+
+/* ── COLORES DE NOTAS ── */
+.nota-alta  { color: #1a7a2e; font-weight: 700; }
+.nota-media { color: #b07d00; font-weight: 700; }
+.nota-baja  { color: #c0392b; font-weight: 700; }

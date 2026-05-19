@@ -1,0 +1,411 @@
+/* =============================================
+   INSCRIPCION.CSS
+   Formulario de inscripción por pasos
+   Depende de: global.css, home.css (navbar)
+   ============================================= */
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: var(--gris);
+}
+
+/* ── NAVBAR (inscripcion) ── */
+.navbar-colegio {
+    background: var(--verde);
+    padding: 0.7rem 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.escudo-nav { width: 38px; height: 38px; object-fit: contain; border-radius: 50%; }
+
+.navbar-colegio .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-size: 0.92rem;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.navbar-colegio .nav-link:hover {
+    color: var(--amarillo) !important;
+    background: rgba(255,255,255,0.08);
+}
+
+.btn-registrarse {
+    background: var(--amarillo);
+    color: var(--verde);
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-registrarse:hover { background: #e0b030; color: var(--verde); }
+
+/* ── HERO ── */
+.hero-inscripcion {
+    background: linear-gradient(135deg, var(--verde) 60%, var(--verde-medio) 100%);
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-inscripcion::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: rgba(240,192,64,0.10);
+    border-radius: 50%;
+}
+
+.hero-inscripcion::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: var(--amarillo);
+    color: var(--verde);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+
+.hero-inscripcion h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.hero-inscripcion p {
+    color: rgba(255,255,255,0.80);
+    font-size: 1.05rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.btn-volver {
+    display: inline-block;
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 8px;
+    padding: 0.45rem 1.2rem;
+}
+
+/* ── BARRA DE PASOS ── */
+.steps-bar {
+    background: var(--blanco);
+    border-bottom: 1px solid var(--borde);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    position: relative;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 2px;
+    background: var(--borde);
+    z-index: -1;
+}
+
+.step.active:not(:last-child)::after { background: var(--verde); }
+
+.step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--borde);
+    color: var(--texto-suave);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.step.active .step-num { background: var(--verde); color: #fff; }
+.step.done .step-num { background: var(--amarillo); color: var(--verde); }
+
+.step-label { font-size: 0.78rem; color: var(--texto-suave); font-weight: 600; white-space: nowrap; }
+.step.active .step-label { color: var(--verde); }
+
+/* ── CONTENEDOR DEL FORM ── */
+.form-wrapper {
+    max-width: 820px;
+    margin: 2.5rem auto;
+    padding: 0 1rem 3rem;
+}
+
+/* ── SECCIONES DEL FORM ── */
+.form-section {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: var(--sombra);
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.form-section.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+    background: linear-gradient(90deg, var(--verde) 0%, var(--verde-medio) 100%);
+    padding: 1.1rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.section-header i { color: var(--amarillo); font-size: 1.3rem; }
+
+.section-header h3 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-body { padding: 1.8rem; }
+
+/* ── CONTROLES DEL FORM ── */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--texto);
+    margin-bottom: 0.35rem;
+}
+
+.form-label .req { color: #c0392b; margin-left: 2px; }
+
+.form-control, .form-select {
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.92rem;
+    color: var(--texto);
+    transition: all 0.2s;
+    background: var(--blanco);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(26,92,42,0.10);
+    outline: none;
+}
+
+.form-control::placeholder { color: #b0b8b3; }
+
+/* ── ZONA DE CARGA ── */
+.upload-zone {
+    border: 2px dashed var(--borde);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--verde-claro-form);
+    position: relative;
+}
+
+.upload-zone:hover { border-color: var(--verde); background: #d8eedd; }
+
+.upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+
+.upload-zone i { font-size: 2rem; color: var(--verde); margin-bottom: 0.5rem; display: block; }
+.upload-zone p { font-size: 0.85rem; color: var(--texto-suave); margin: 0; }
+.upload-zone strong { color: var(--verde); }
+.file-name { font-size: 0.82rem; color: var(--verde); margin-top: 0.4rem; font-weight: 600; }
+
+/* ── CHECKBOX ── */
+.form-check-input:checked {
+    background-color: var(--verde);
+    border-color: var(--verde);
+}
+
+.form-check-label { font-size: 0.9rem; color: var(--texto-suave); }
+
+/* ── CAJA DE INFORMACIÓN ── */
+.info-box {
+    background: var(--amarillo-claro);
+    border-left: 4px solid var(--amarillo);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.87rem;
+    color: var(--texto-suave);
+    margin-bottom: 1.2rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+}
+
+.info-box i { color: var(--amarillo); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+/* ── BOTONES DE NAVEGACIÓN ── */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.btn-prev {
+    background: transparent;
+    border: 2px solid var(--borde);
+    color: var(--texto-suave);
+    border-radius: 10px;
+    padding: 0.65rem 1.6rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-prev:hover { border-color: var(--verde); color: var(--verde); }
+
+.btn-next {
+    background: var(--verde);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0.65rem 2rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-next:hover { background: var(--verde-medio); transform: translateY(-1px); }
+
+.btn-submit {
+    background: linear-gradient(90deg, var(--verde) 0%, var(--verde-medio) 100%);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0.75rem 2.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,92,42,0.25); }
+
+/* ── DIVISOR ── */
+.form-divider {
+    height: 1px;
+    background: var(--borde);
+    margin: 1.4rem 0;
+}
+
+/* ── TARJETA DE ÉXITO ── */
+.success-card {
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: var(--sombra);
+    padding: 3rem 2rem;
+    text-align: center;
+    display: none;
+}
+
+.success-card.active { display: block; animation: fadeIn 0.5s ease; }
+
+.success-icon {
+    width: 80px; height: 80px;
+    background: var(--verde-claro-form);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.success-icon i { font-size: 2.5rem; color: var(--verde); }
+
+.success-card h2 { font-family: 'Playfair Display', serif; color: var(--verde); margin-bottom: 0.5rem; }
+.success-card p { color: var(--texto-suave); max-width: 400px; margin: 0 auto 1.5rem; }
+
+.btn-inicio {
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.btn-inicio:hover { background: var(--verde-medio); color: #fff; }
+
+/* ── FOOTER MINI ── */
+.footer-mini {
+    background: var(--verde);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 1.2rem;
+    font-size: 0.82rem;
+}
+
+.footer-mini span { color: var(--amarillo); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    .hero-inscripcion h1 { font-size: 1.7rem; }
+    .step-label { display: none; }
+    .section-body { padding: 1.2rem; }
+}

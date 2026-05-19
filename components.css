@@ -1,0 +1,332 @@
+/* =============================================
+   COMPONENTS.CSS
+   Sidebar, topbar, tarjetas y mensajes
+   Compartido entre portales de estudiantes,
+   acudientes y docentes
+   Depende de: global.css
+   ============================================= */
+
+/* ── SIDEBAR ── */
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background-color: var(--verde);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+    top: 0; left: 0;
+    z-index: 200;
+    transition: transform 0.3s;
+}
+
+.sidebar-header {
+    background-color: var(--verde-oscuro);
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.sidebar-header .escudo-logo,
+.sidebar-header img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+}
+
+.sidebar-header span {
+    color: white;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.sidebar-menu { padding: 0.5rem 0; flex: 1; }
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.75);
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: var(--amarillo);
+    color: var(--verde-oscuro) !important;
+    font-weight: 600;
+    border-left-color: var(--amarillo);
+}
+
+.sidebar .nav-link i { font-size: 1.1rem; }
+
+/* ── USER BAR (pie del sidebar) ── */
+.user-bar {
+    margin-top: auto;
+    padding: 0.9rem 1.2rem;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.user-bar .avatar,
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--amarillo);
+    color: var(--verde-oscuro);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-bar .user-name,
+.user-name { color: white; font-size: 0.85rem; font-weight: 600; }
+
+.user-bar .user-status,
+.user-role { color: rgba(255,255,255,0.55); font-size: 0.72rem; }
+
+/* ── TOPBAR ── */
+.top-bar {
+    background-color: var(--verde);
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.top-bar h2 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.top-bar-actions { display: flex; align-items: center; gap: 0.8rem; }
+
+.welcome-text {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.88rem;
+}
+
+.notif-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.notif-dot {
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 8px; height: 8px;
+    background: var(--amarillo);
+    border-radius: 50%;
+    border: 1.5px solid var(--verde);
+}
+
+/* ── MAIN CONTENT (docentes) ── */
+.main-content {
+    margin-left: 240px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: calc(100% - 240px);
+}
+
+.page-content { padding: 1.5rem; flex: 1; }
+
+/* ── PANEL CARDS ── */
+.panel-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+}
+
+.panel-header {
+    background: linear-gradient(90deg, var(--verde), var(--verde-medio));
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.panel-header i { color: var(--amarillo); font-size: 1.1rem; }
+
+.panel-header h3 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.panel-body { padding: 1.2rem; }
+
+/* ── TARJETAS DE MENSAJE ── */
+.message-card {
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid var(--amarillo);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1) !important;
+}
+
+.msg-item {
+    border: 1.5px solid var(--borde);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    border-left: 4px solid var(--amarillo);
+}
+
+.msg-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.msg-item.unread { border-left-color: var(--verde); background: #f9fffe; }
+
+.sender-name,
+.msg-remitente { font-size: 0.88rem; font-weight: 600; color: var(--verde); }
+
+.msg-subject,
+.msg-asunto { font-size: 0.9rem; font-weight: 600; color: #222; margin: 3px 0; }
+
+.msg-preview { font-size: 0.82rem; color: #666; margin: 0; }
+.msg-date,
+.msg-fecha  { font-size: 0.78rem; color: #999; white-space: nowrap; }
+
+.unread-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* ── BADGES ── */
+.badge-math  { background: #e8f5e9 !important; color: #006400 !important; }
+.badge-coord { background: #fff3e0 !important; color: #e65100 !important; }
+.badge-salud { background: #e3f2fd !important; color: #1565c0 !important; }
+
+/* ── BOTONES COMPARTIDOS ── */
+.btn-compose,
+.compose-btn {
+    background-color: var(--verde);
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    padding: 0.55rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-compose:hover,
+.compose-btn:hover { background-color: var(--verde-oscuro); color: white; }
+
+/* ── STAT CARDS ── */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: var(--sombra);
+    border-left: 4px solid var(--verde);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: #e8f5eb;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    color: var(--verde);
+    flex-shrink: 0;
+}
+
+.stat-num { font-size: 1.6rem; font-weight: 700; color: var(--verde); line-height: 1; }
+.stat-label { font-size: 0.82rem; color: #777; margin-top: 2px; }
+
+/* ── MODAL ── */
+.modal-header { background: var(--verde); }
+.modal-header .modal-title { color: white; }
+.btn-close-white { filter: invert(1); }
+
+/* ── TOAST ── */
+.toast-exito {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    background: var(--verde);
+    color: white;
+    padding: 0.8rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 8px 24px rgba(0,100,0,0.3);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    pointer-events: none;
+}
+
+.toast-exito.show { opacity: 1; transform: translateY(0); }
+
+/* ── FIX PORTALES ── */
+.portal-acudiente .sidebar,
+.portal-estudiante .sidebar {
+    position: relative !important;
+    flex-shrink: 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        transform: translateX(-100%);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; width: 100%; }
+}

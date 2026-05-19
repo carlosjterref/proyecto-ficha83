@@ -1,0 +1,207 @@
+/* =============================================
+   HOME.CSS
+   Navbar, sección pastoral, cards y footer
+   Página principal (index.html)
+   Depende de: global.css
+   ============================================= */
+
+/* ── NAVBAR ── */
+.navbar-colegio { background-color: var(--verde-medio); }
+
+.navbar-colegio .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.5rem 0.8rem !important;
+}
+
+.navbar-colegio .nav-link:hover { color: var(--amarillo) !important; }
+
+.navbar-colegio .navbar-toggler { border-color: rgba(255,255,255,0.3); }
+
+.navbar-colegio .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.btn-acceso {
+    background: white;
+    color: #0a3c63;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.btn-registrarse {
+    background: var(--amarillo);
+    color: #543d00;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.btn-acceso:hover, .btn-registrarse:hover { filter: brightness(0.9); }
+
+.escudo-nav {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+}
+
+/* ── SECCIÓN PASTORAL ── */
+.pastoral-section {
+    padding: 4rem 0;
+    background: #f9fafb;
+}
+
+.pastoral-section h2 {
+    color: var(--verde);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.pastoral-section p {
+    line-height: 1.8;
+    color: #444;
+    font-size: 1rem;
+}
+
+.pastoral-img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 380px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.escudo-pastoral {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── BARRA TÍTULO ── */
+.barra-titulo {
+    background-color: var(--verde-claro);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: white;
+}
+
+.barra-titulo h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ── CARDS PASTORAL ── */
+.cards-section {
+    padding: 3rem 0;
+    background: white;
+}
+
+.pastoral-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.2s;
+    border-top: 4px solid var(--verde);
+}
+
+.pastoral-card:hover { transform: translateY(-4px); }
+
+.pastoral-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.pastoral-card .card-body { padding: 1.5rem; }
+
+.pastoral-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--verde);
+    margin-bottom: 0.75rem;
+}
+
+.pastoral-card p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* ── FOOTER ── */
+.footer {
+    background-color: var(--verde-footer);
+    color: white;
+    padding: 3rem 0 0;
+}
+
+.footer h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; }
+
+.footer p, .footer a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+}
+
+.footer a:hover { color: var(--amarillo); }
+.footer ul { list-style: none; padding: 0; }
+.footer ul li { margin-bottom: 0.4rem; }
+
+.footer-divider {
+    height: 4px;
+    background: linear-gradient(90deg, var(--verde-claro), var(--amarillo));
+    margin: 2rem 0 0;
+}
+
+.footer-bottom {
+    background: rgba(0,0,0,0.2);
+    padding: 1rem 0;
+}
+
+.footer-bottom p, .footer-bottom a {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+}
+
+.footer-bottom a:hover { color: var(--amarillo); }
+
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 1rem;
+    margin-right: 6px;
+    transition: background 0.2s;
+}
+
+.social-icons a:hover { background: var(--amarillo); color: var(--verde); }
+
+.footer-map iframe { border-radius: 10px; width: 100%; }
+
+.escudo-footer {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+    margin-bottom: 1.75rem;
+}
