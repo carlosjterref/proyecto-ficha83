@@ -185,7 +185,7 @@ body {
 .forgot-link:hover { text-decoration: underline; }
 
 /* =============================================
-   NAVBAR (Inicio.html)
+   NAVBAR (index.html)
    ============================================= */
 .navbar-colegio { background-color: var(--verde-medio); }
 
@@ -234,7 +234,7 @@ body {
 }
 
 /* =============================================
-   SECCIÓN PASTORAL (Inicio.html)
+   SECCIÓN PASTORAL (index.html)
    ============================================= */
 .pastoral-section {
     padding: 4rem 0;
@@ -273,7 +273,7 @@ body {
 }
 
 /* =============================================
-   BARRA TÍTULO (Inicio.html)
+   BARRA TÍTULO (index.html)
    ============================================= */
 .barra-titulo {
     background-color: var(--verde-claro);
@@ -289,7 +289,7 @@ body {
 }
 
 /* =============================================
-   CARDS PASTORAL (Inicio.html)
+   CARDS PASTORAL (index.html)
    ============================================= */
 .cards-section {
     padding: 3rem 0;
@@ -396,7 +396,7 @@ body {
 }
 
 /* =============================================
-   MENSAJERÍA - SIDEBAR (mensajeria.html)
+  (Acudiente-estudiante.html)
    ============================================= */
 .sidebar {
     width: 240px;
@@ -405,6 +405,7 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    position: relative;
 }
 
 .sidebar-header {
@@ -474,7 +475,7 @@ body {
 }
 
 /* =============================================
-   MENSAJERÍA - TOPBAR
+  TOPBAR
    ============================================= */
 .top-bar {
     background-color: var(--verde);
@@ -517,7 +518,7 @@ body {
 }
 
 /* =============================================
-   MENSAJERÍA - TARJETAS
+  TARJETAS
    ============================================= */
 .message-card {
     background: white;
@@ -632,7 +633,7 @@ body {
             margin-bottom: 1rem;
         }
         .hero-inscripcion h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', serif;  /*"formulario de inscripcion" */
             color: #fff;
             font-size: 2.4rem;
             font-weight: 700;
@@ -733,7 +734,7 @@ body {
             font-size: 1.3rem;
         }
         .section-header h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', serif; /*datos del estudiante*/
             color: #fff;
             font-size: 1.1rem;
             font-weight: 600;
@@ -912,4 +913,435 @@ body {
         border: 2px solid rgba(255,255,255,0.4);
         border-radius: 8px;
         padding: 0.45rem 1.2rem;
+        }
+        /* =============================================
+           DOCENTES
+        ============================================= */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── LOGIN ── */
+        #vista-login {
+            min-height: 100vh;
+            background-image: url("Colegio.JPG");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .escudo-logo {
+            width: 80px; height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+        }
+
+        .login-title {
+            color: var(--verde);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        .login-subtitle { color: #666; font-size: 0.88rem; }
+
+        .login-divider {
+            height: 3px;
+            background: linear-gradient(90deg, var(--verde), var(--amarillo));
+            border-radius: 99px;
+            margin-bottom: 1.5rem;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: var(--amarillo);
+            color: var(--verde-oscuro);
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 0.8rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--verde);
+            box-shadow: 0 0 0 3px rgba(0,100,0,0.12);
+        }
+
+        .btn-ingresar {
+            background-color: var(--verde);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-ingresar:hover { background-color: var(--verde-medio); }
+
+        .forgot-link { color: var(--verde); font-size: 0.85rem; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+
+        .btn-volver {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--verde);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .btn-volver:hover { text-decoration: underline; color: var(--verde); }
+
+        /* ── DASHBOARD ── */
+        #vista-dashboard { 
+            display: none; 
+            min-height: 100vh; 
+            background: var(--bg); 
+            flex-direction: row;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: var(--verde);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            top: 0; left: 0;
+            z-index: 200;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-header {
+            background: var(--verde-oscuro);
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .sidebar-header img { width: 40px; height: 40px; object-fit: contain; }
+        .sidebar-header span { color: white; font-size: 0.88rem; font-weight: 700; line-height: 1.3; }
+
+        .sidebar-menu { padding: 0.5rem 0; flex: 1; }
+
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 0.75rem 1.2rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--amarillo);
+            border-left-color: var(--amarillo);
+        }
+
+        .sidebar .nav-link i { font-size: 1.1rem; }
+
+        .user-bar {
+            padding: 0.9rem 1.2rem;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--amarillo);
+            color: var(--verde-oscuro);
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .user-name { color: white; font-size: 0.85rem; font-weight: 600; }
+        .user-role { color: rgba(255,255,255,0.55); font-size: 0.72rem; }
+
+        /* Main content */
+        .main-content {
+            margin-left: 240px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width: calc(100% - 240px);
+        }
+
+        .top-bar {
+            background: var(--verde);
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar h2 {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .top-bar-actions { display: flex; align-items: center; gap: 0.8rem; }
+
+        .notif-btn {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notif-dot {
+            position: absolute; top: 5px; right: 5px;
+            width: 8px; height: 8px;
+            background: var(--amarillo);
+            border-radius: 50%;
+        }
+
+        .page-content { padding: 1.5rem; flex: 1; }
+
+        /* Secciones del dashboard */
+        .dash-section { display: none; animation: fadeUp 0.3s ease; }
+        .dash-section.active { display: block; }
+
+        /* Stat cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            box-shadow: var(--sombra);
+            border-left: 4px solid var(--verde);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 10px;
+            background: #e8f5eb;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            color: var(--verde);
+            flex-shrink: 0;
+        }
+
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--verde); line-height: 1; }
+        .stat-label { font-size: 0.82rem; color: #777; margin-top: 2px; }
+
+        /* Panel cards */
+        .panel-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--sombra);
+            overflow: hidden;
+            margin-bottom: 1.2rem;
+        }
+
+        .panel-header {
+            background: linear-gradient(90deg, var(--verde), var(--verde-medio));
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .panel-header i { color: var(--amarillo); font-size: 1.1rem; }
+        .panel-header h3 { color: white; font-size: 1rem; font-weight: 600; margin: 0; font-family: 'Playfair Display', serif; }
+        .panel-body { padding: 1.2rem; }
+
+        /* Curso card */
+        .curso-card {
+            border: 1.5px solid var(--borde);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .curso-card:hover {
+            border-color: var(--verde);
+            box-shadow: 0 4px 12px rgba(0,100,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .curso-nombre { font-weight: 700; color: var(--verde); font-size: 0.95rem; }
+        .curso-info { font-size: 0.82rem; color: #777; margin-top: 2px; }
+        .curso-badge {
+            background: #e8f5eb;
+            color: var(--verde);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        /* Tabla estudiantes */
+        .tabla-estudiantes { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        .tabla-estudiantes th {
+            background: var(--verde);
+            color: white;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.82rem;
+        }
+        .tabla-estudiantes td { padding: 0.7rem 1rem; border-bottom: 1px solid #f0f0f0; }
+        .tabla-estudiantes tr:hover td { background: #f9fafb; }
+
+        .nota-input {
+            width: 65px;
+            border: 1.5px solid var(--borde);
+            border-radius: 6px;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.88rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .nota-input:focus { border-color: var(--verde); outline: none; box-shadow: 0 0 0 2px rgba(0,100,0,0.1); }
+
+        .btn-guardar-notas {
+            background: var(--verde);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem 1.4rem;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-guardar-notas:hover { background: var(--verde-medio); transform: translateY(-1px); }
+
+        .nota-alta { color: #1a7a2e; font-weight: 700; }
+        .nota-media { color: #b07d00; font-weight: 700; }
+        .nota-baja { color: #c0392b; font-weight: 700; }
+
+        /* Mensajes */
+        .msg-item {
+            border: 1.5px solid var(--borde);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            border-left: 4px solid var(--amarillo);
+        }
+        .msg-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+        .msg-item.unread { border-left-color: var(--verde); background: #f9fffe; }
+        .msg-remitente { font-weight: 700; font-size: 0.88rem; color: var(--verde); }
+        .msg-asunto { font-size: 0.92rem; font-weight: 600; color: #222; margin: 2px 0; }
+        .msg-preview { font-size: 0.82rem; color: #777; }
+        .msg-fecha { font-size: 0.78rem; color: #aaa; }
+
+        .compose-btn {
+            background: var(--verde);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem 1.2rem;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .compose-btn:hover { background: var(--verde-medio); }
+
+        /* Modal nuevo mensaje */
+        .modal-header { background: var(--verde); }
+        .modal-header .modal-title { color: white; font-family: 'Playfair Display', serif; }
+        .btn-close-white { filter: invert(1); }
+
+        /* Toast */
+        .toast-exito {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            background: var(--verde);
+            color: white;
+            padding: 0.8rem 1.4rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 24px rgba(0,100,0,0.3);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .toast-exito.show { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+
+       /* Fix portales acudiente y estudiante */
+        .portal-acudiente .sidebar,
+        .portal-estudiante .sidebar {
+        position: relative !important;
+        flex-shrink: 0;
         }
