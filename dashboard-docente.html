@@ -9,79 +9,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="components.css">
-    <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="docentes.css">
 </head>
 <body>
 
 <!-- ══════════════════════════════════
-     VISTA LOGIN
-══════════════════════════════════ -->
-<div id="vista-login">
-    <div class="login-card">
-        <div class="text-center mb-3">
-            <img src="escudo.png" alt="Escudo Yermo y Parres" class="escudo-logo">
-            <div class="role-badge mt-2">Portal Docente</div>
-            <h2 class="login-title">Bienvenido, Profesor</h2>
-            <p class="login-subtitle">Ingrese sus credenciales para continuar</p>
-        </div>
-        <div class="login-divider"></div>
-
-        <div class="mb-3">
-            <label class="form-label fw-semibold" style="font-size:0.88rem;">
-                <i class="bi bi-envelope me-1"></i>Correo institucional
-            </label>
-            <input type="email" class="form-control" id="login-correo" placeholder="profesor@yermoyparres.edu.co">
-        </div>
-        <div class="mb-4">
-            <label class="form-label fw-semibold" style="font-size:0.88rem;">
-                <i class="bi bi-lock me-1"></i>Contraseña
-            </label>
-            <input type="password" class="form-control" id="login-pass" placeholder="••••••••">
-        </div>
-        <button class="btn-ingresar mb-3" onclick="iniciarSesion()">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
-        </button>
-        <div class="text-center">
-            <a href="#" class="forgot-link">¿Olvidó su contraseña?</a>
-        </div>
-        <div class="text-center">
-            <a href="index.html" class="btn-volver">
-                <i class="bi bi-arrow-left me-1"></i>Volver al inicio
-            </a>
-        </div>
-    </div>
-</div>
-
-<!-- ══════════════════════════════════
      VISTA DASHBOARD
 ══════════════════════════════════ -->
-<div id="vista-dashboard">
+<div id="vista-dashboard" style="display:flex; min-height:100vh; background:var(--bg); flex-direction:row; align-items:stretch;">
+
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="escudo.png" alt="Escudo">
-            <span>Yermo y Parres<br><small style="font-weight:400;opacity:0.7">Portal Docente</small></span>
+            <span>Yermo y Parres<br>
+                <small style="font-weight:400;opacity:0.7">Portal Docente</small>
+            </span>
         </div>
         <div class="sidebar-menu">
-            <a class="nav-link active" onclick="mostrarSeccion('resumen')">
+            <a class="nav-link active" onclick="mostrarSeccion('resumen', this)">
                 <i class="bi bi-grid"></i> Resumen
             </a>
-            <a class="nav-link" onclick="mostrarSeccion('cursos')">
+            <a class="nav-link" onclick="mostrarSeccion('cursos', this)">
                 <i class="bi bi-journal-bookmark"></i> Mis cursos
             </a>
-            <a class="nav-link" onclick="mostrarSeccion('notas')">
+            <a class="nav-link" onclick="mostrarSeccion('notas', this)">
                 <i class="bi bi-pencil-square"></i> Ingresar notas
             </a>
-            <a class="nav-link" onclick="mostrarSeccion('mensajes')">
+            <a class="nav-link" onclick="mostrarSeccion('mensajes', this)">
                 <i class="bi bi-chat-dots"></i> Mensajes
                 <span class="ms-auto badge" style="background:var(--amarillo);color:var(--verde-oscuro);font-size:0.72rem;">3</span>
             </a>
         </div>
         <div class="user-bar">
-            <div class="avatar" id="avatar-iniciales">JP</div>
+            <div class="avatar" id="avatar-iniciales">--</div>
             <div>
-                <div class="user-name" id="nombre-docente">Prof. García</div>
+                <div class="user-name" id="nombre-docente">Cargando...</div>
                 <div class="user-role">Docente</div>
             </div>
         </div>
@@ -118,7 +81,9 @@
                     </div>
                     <div class="col-sm-6 col-lg-3">
                         <div class="stat-card" style="border-left-color:var(--amarillo)">
-                            <div class="stat-icon" style="background:#fdf6e0;color:#b07d00"><i class="bi bi-people"></i></div>
+                            <div class="stat-icon" style="background:#fdf6e0;color:#b07d00">
+                                <i class="bi bi-people"></i>
+                            </div>
                             <div>
                                 <div class="stat-num" style="color:#b07d00">128</div>
                                 <div class="stat-label">Estudiantes</div>
@@ -127,7 +92,9 @@
                     </div>
                     <div class="col-sm-6 col-lg-3">
                         <div class="stat-card" style="border-left-color:#1565c0">
-                            <div class="stat-icon" style="background:#e3f2fd;color:#1565c0"><i class="bi bi-chat-dots"></i></div>
+                            <div class="stat-icon" style="background:#e3f2fd;color:#1565c0">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
                             <div>
                                 <div class="stat-num" style="color:#1565c0">3</div>
                                 <div class="stat-label">Mensajes nuevos</div>
@@ -136,7 +103,9 @@
                     </div>
                     <div class="col-sm-6 col-lg-3">
                         <div class="stat-card" style="border-left-color:#c0392b">
-                            <div class="stat-icon" style="background:#fdecea;color:#c0392b"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-icon" style="background:#fdecea;color:#c0392b">
+                                <i class="bi bi-exclamation-circle"></i>
+                            </div>
                             <div>
                                 <div class="stat-num" style="color:#c0392b">7</div>
                                 <div class="stat-label">Notas pendientes</div>
@@ -156,19 +125,23 @@
                                 <ul class="list-unstyled mb-0" style="font-size:0.88rem;">
                                     <li class="d-flex gap-2 align-items-start mb-3">
                                         <i class="bi bi-check-circle-fill text-success mt-1"></i>
-                                        <div><strong>Notas ingresadas</strong> — Matemáticas 8°A<br><small class="text-muted">Hoy, 9:30 AM</small></div>
+                                        <div><strong>Notas ingresadas</strong> — Matemáticas 8°A<br>
+                                            <small class="text-muted">Hoy, 9:30 AM</small></div>
                                     </li>
                                     <li class="d-flex gap-2 align-items-start mb-3">
                                         <i class="bi bi-chat-fill mt-1" style="color:var(--amarillo)"></i>
-                                        <div><strong>Mensaje recibido</strong> — Coordinación académica<br><small class="text-muted">Ayer, 3:15 PM</small></div>
+                                        <div><strong>Mensaje recibido</strong> — Coordinación académica<br>
+                                            <small class="text-muted">Ayer, 3:15 PM</small></div>
                                     </li>
                                     <li class="d-flex gap-2 align-items-start mb-3">
                                         <i class="bi bi-check-circle-fill text-success mt-1"></i>
-                                        <div><strong>Notas ingresadas</strong> — Ciencias 7°B<br><small class="text-muted">Lun 12 May, 11:00 AM</small></div>
+                                        <div><strong>Notas ingresadas</strong> — Ciencias 7°B<br>
+                                            <small class="text-muted">Lun 12 May, 11:00 AM</small></div>
                                     </li>
                                     <li class="d-flex gap-2 align-items-start">
                                         <i class="bi bi-exclamation-circle-fill mt-1" style="color:#c0392b"></i>
-                                        <div><strong>Notas pendientes</strong> — Matemáticas 9°A<br><small class="text-muted">Vence: Vie 23 May</small></div>
+                                        <div><strong>Notas pendientes</strong> — Matemáticas 9°A<br>
+                                            <small class="text-muted">Vence: Vie 23 May</small></div>
                                     </li>
                                 </ul>
                             </div>
@@ -431,7 +404,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-sm fw-bold" style="background:var(--verde);color:white;" data-bs-dismiss="modal" onclick="mostrarToast('Mensaje enviado correctamente')">
+                <button class="btn btn-sm fw-bold" style="background:var(--verde);color:white;"
+                        data-bs-dismiss="modal"
+                        onclick="mostrarToast('Mensaje enviado correctamente')">
                     <i class="bi bi-send me-1"></i> Enviar
                 </button>
             </div>
@@ -446,103 +421,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Datos demo
-    const estudiantes = [
-        { nombre: "Alejandro Ramírez", doc: "1023001" },
-        { nombre: "Valeria Moreno",    doc: "1023002" },
-        { nombre: "Santiago Gómez",    doc: "1023003" },
-        { nombre: "Isabella Torres",   doc: "1023004" },
-        { nombre: "Sebastián Ruiz",    doc: "1023005" },
-        { nombre: "Camila Vargas",     doc: "1023006" },
-        { nombre: "Daniel Herrera",    doc: "1023007" },
-        { nombre: "Laura Castillo",    doc: "1023008" },
-    ];
-
-    const notasPrev = [4.2, 3.8, 2.9, 4.5, 3.1, 4.0, 2.5, 3.7];
-
-    function renderTabla() {
-        const tbody = document.getElementById('tbody-estudiantes');
-        tbody.innerHTML = estudiantes.map((e, i) => {
-            const np = notasPrev[i];
-            const cls = np >= 4 ? 'nota-alta' : np >= 3 ? 'nota-media' : 'nota-baja';
-            return `<tr>
-                <td>${i+1}</td>
-                <td><strong>${e.nombre}</strong></td>
-                <td style="color:#888">${e.doc}</td>
-                <td><span class="${cls}">${np.toFixed(1)}</span></td>
-                <td><input type="number" class="nota-input" min="1" max="5" step="0.1" placeholder="—" id="nota-${i}"></td>
-                <td><span class="badge" style="background:#e8f5eb;color:var(--verde);font-size:0.75rem;">Pendiente</span></td>
-            </tr>`;
-        }).join('');
-    }
-
-    function iniciarSesion() {
-        const correo = document.getElementById('login-correo').value;
-        const pass   = document.getElementById('login-pass').value;
-        if (!correo || !pass) { alert('Complete todos los campos.'); return; }
-        // Simulación login
-        const nombre = correo.split('@')[0];
-        const iniciales = nombre.substring(0,2).toUpperCase();
-        document.getElementById('nombre-docente').textContent = 'Prof. ' + nombre.charAt(0).toUpperCase() + nombre.slice(1);
-        document.getElementById('avatar-iniciales').textContent = iniciales;
-        document.getElementById('vista-login').style.display = 'none';
-        document.getElementById('vista-dashboard').style.display = 'flex';
-        renderTabla();
-    }
-
-    function cerrarSesion() {
-        document.getElementById('vista-dashboard').style.display = 'none';
-        document.getElementById('vista-login').style.display = 'flex';
-        document.getElementById('login-correo').value = '';
-        document.getElementById('login-pass').value = '';
-    }
-
-    function mostrarSeccion(id) {
-        document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-        document.getElementById('sec-' + id).classList.add('active');
-        event.currentTarget.classList.add('active');
-        const titulos = { resumen: 'Resumen', cursos: 'Mis cursos', notas: 'Ingresar notas', mensajes: 'Mensajes' };
-        document.getElementById('titulo-seccion').textContent = titulos[id];
-    }
-
-    function irANotas(materia, grado, num) {
-        mostrarSeccion('notas');
-        document.getElementById('titulo-notas').textContent = `Notas — ${materia} ${grado}`;
-        // Activar link en sidebar
-        document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-        document.querySelectorAll('.sidebar .nav-link')[2].classList.add('active');
-        document.getElementById('titulo-seccion').textContent = 'Ingresar notas';
-        renderTabla();
-    }
-
-    function guardarNotas() {
-        let completas = true;
-        estudiantes.forEach((_, i) => {
-            const v = document.getElementById('nota-' + i).value;
-            if (!v) completas = false;
-        });
-        if (!completas) {
-            mostrarToast('Complete todas las notas antes de guardar');
-            return;
-        }
-        mostrarToast('Notas guardadas correctamente ✓');
-    }
-
-    function mostrarToast(msg) {
-        const t = document.getElementById('toast');
-        document.getElementById('toast-msg').textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
-    }
-
-    // Enter en login
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && document.getElementById('vista-login').style.display !== 'none') {
-            iniciarSesion();
-        }
-    });
-</script>
+<script src="js/docentes.js"></script>
 </body>
 </html>

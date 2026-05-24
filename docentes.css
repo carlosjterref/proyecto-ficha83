@@ -104,3 +104,11 @@ body { font-family: 'Lato', sans-serif; }
 .nota-alta  { color: #1a7a2e; font-weight: 700; }
 .nota-media { color: #b07d00; font-weight: 700; }
 .nota-baja  { color: #c0392b; font-weight: 700; }
+
+/* ── FIX ALTURA COMPLETA DEL DASHBOARD ── */
+html, body { height: 100%; }
+
+#vista-dashboard {
+    min-height: 100vh;
+    align-items: stretch;
+}
