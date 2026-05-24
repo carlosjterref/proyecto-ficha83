@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="estudiantes.css">
 </head>
 <body style="background-color:#f4f7f6;">
 
@@ -20,10 +21,11 @@
             <span>Yermo y<br>Parres</span>
         </div>
         <ul class="nav flex-column mt-1">
-            <li class="nav-item"><a href="#" class="nav-link active"><i class="bi bi-inbox me-2"></i>Bandeja de Entrada</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-send me-2"></i>Enviados</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-megaphone me-2"></i>Comunicados Generales</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" onclick="mostrarSeccion('bandeja', this)"><i class="bi bi-inbox me-2"></i>Bandeja de Entrada</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('enviados', this)"><i class="bi bi-send me-2"></i>Enviados</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('comunicados', this)"><i class="bi bi-megaphone me-2"></i>Comunicados Generales</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('configuracion', this)"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('notas', this)"><i class="bi bi-journal-text me-2"></i>Notas</a></li>
             <li class="nav-item"><a href="login-estudiantes.html" class="nav-link"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a></li>
         </ul>
         <div class="user-bar d-flex align-items-center gap-2">
@@ -48,54 +50,40 @@
             </div>
         </header>
 
-        <section class="flex-grow-1 p-3 p-md-4" style="overflow-y:auto;">
+        <!-- BANDEJA -->
+    <section class="seccion flex-grow-1 p-3 p-md-4 active" id="sec-bandeja" style="overflow-y:auto;">
             <div class="message-card p-3 mb-3 shadow-sm">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="unread-dot"></div>
-                        <span class="sender-name">Prof. María González</span>
-                        <span class="badge rounded-pill badge-math">Matemáticas</span>
-                    </div>
-                    <span class="msg-date"><i class="bi bi-clock me-1"></i>Hoy, 10:30 AM</span>
-                </div>
-                <p class="msg-subject">Reporte de calificaciones parciales</p>
-                <p class="msg-preview">Buen día, le informo que las notas del segundo corte ya están disponibles en la plataforma...</p>
+                <!-- tus mensajes actuales van aquí -->
+                ...
             </div>
+    </section>
 
-            <div class="message-card p-3 mb-3 shadow-sm">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="unread-dot"></div>
-                        <span class="sender-name">Coordinación Académica</span>
-                        <span class="badge rounded-pill badge-coord">Oficial</span>
-                    </div>
-                    <span class="msg-date"><i class="bi bi-clock me-1"></i>Ayer, 02:15 PM</span>
-                </div>
-                <p class="msg-subject">Reunión de padres de familia</p>
-                <p class="msg-preview">Cordial saludo. Se les invita a la reunión obligatoria el próximo viernes a las 7:00 AM...</p>
-            </div>
+        <!-- ENVIADOS -->
+    <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-enviados" style="overflow-y:auto;">
+            <p class="text-muted">No tienes mensajes enviados.</p>
+    </section>
 
-            <div class="message-card p-3 mb-3 shadow-sm">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="sender-name">Enfermería</span>
-                        <span class="badge rounded-pill badge-salud">Salud</span>
-                    </div>
-                    <span class="msg-date"><i class="bi bi-clock me-1"></i>05 Dic, 09:00 AM</span>
-                </div>
-                <p class="msg-subject">Recordatorio de vacunación</p>
-                <p class="msg-preview">Recordamos traer el carnet de vacunación actualizado para la jornada de salud...</p>
-            </div>
-        </section>
+        <!-- COMUNICADOS -->
+    <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-comunicados" style="overflow-y:auto;">
+            <p class="text-muted">No hay comunicados generales.</p>
+    </section>
 
-        <div class="p-3" style="background:#f4f7f6;">
-            <button class="btn btn-compose w-100">
-                <i class="bi bi-pencil-square me-2"></i>Nuevo Mensaje
-            </button>
-        </div>
-    </main>
+        <!-- CONFIGURACIÓN -->
+    <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-configuracion" style="overflow-y:auto;">
+            <h5 class="fw-bold mb-3" style="color:var(--verde)">Configuración</h5>
+            <p class="text-muted">Opciones de configuración próximamente.</p>
+    </section>
+
+        <!-- NOTAS -->
+    <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-notas" style="overflow-y:auto;">
+            <h5 class="fw-bold mb-3" style="color:var(--verde)">Mis Notas</h5>
+            <p class="text-muted">Notas próximamente.</p>
+    </section>
+
+            </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="estudiantes.js"></script>
 </body>
 </html>
