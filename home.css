@@ -119,6 +119,11 @@
     border-top: 4px solid var(--verde);
 }
 
+.pastoral-card .card-body {
+    padding: 1.5rem;
+    text-align: center;  
+}
+
 .pastoral-card:hover { transform: translateY(-4px); }
 
 .pastoral-card img {
@@ -137,7 +142,7 @@
 }
 
 .pastoral-card p {
-    font-size: 0.9rem;
+    font-size: 2 rem;
     color: #555;
     line-height: 1.6;
 }
