@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -6,8 +6,8 @@
     <title>Buzón de Mensajes - Yermo y Parres</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="global.css">
-    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body style="background-color:#f4f7f6;">
 
@@ -29,7 +29,7 @@
         <div class="user-bar d-flex align-items-center gap-2">
             <div class="avatar">ES</div>
             <div>
-                <div class="user-name">Estudiante</div>
+                <div class="user-name">Acudiente</div>
                 <div class="user-status"><i class="bi bi-circle-fill text-success" style="font-size:0.45rem;"></i> En línea</div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                     <i class="bi bi-bell" style="font-size:1rem;"></i>
                     <span class="notif-dot"></span>
                 </button>
-                <span class="welcome-text">Bienvenido, <strong class="text-white">Estudiante</strong></span>
+                <span class="welcome-text">Bienvenido, <strong class="text-white">Acudiente</strong></span>
             </div>
         </header>
 
@@ -77,13 +77,66 @@
         </section>
 
         <div class="p-3" style="background:#f4f7f6;">
-            <button class="btn btn-compose w-100">
+            <button class="btn btn-compose w-100" data-bs-toggle="modal" data-bs-target="#modalNuevoMensaje">
                 <i class="bi bi-pencil-square me-2"></i>Nuevo Mensaje
             </button>
+        <!--    <button class="btn btn-compose w-100">
+                <i class="bi bi-pencil-square me-2"></i>Nuevo Mensaje
+            </button>
+        </div>-->
+
+        <!--Nuevo mensaje-->
+
+        <div class="modal fade" id="modalNuevoMensaje" tabindex="-1" aria-labelledby="modalNuevoMensajeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #f4f7f6;">
+                <h5 class="modal-title" id="modalNuevoMensajeLabel">
+                    <i class="bi bi-pencil-square me-2"></i>Redactar Mensaje
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="formNuevoMensaje">
+                    <div class="mb-3">
+                        <label for="destinatario" class="form-label">Destinatario</label>
+                        <select class="form-select" id="destinatario" required>
+                            <option value="" selected disabled>Seleccione un destinatario...</option>
+                            <option value="coord">Coordinación Académica</option>
+                            <option value="enfermeria">Enfermería</option>
+                            <option value="rectoria">Rectoría</option>
+                            <option value="profesor">Director de Grupo / Profesor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <input type="text" class="form-control" id="asunto" placeholder="Ej. Justificación de inasistencia" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" rows="4" placeholder="Escriba su mensaje aquí..." required></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #109116;">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
+</div>
+
+
     </main>
 </div>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/acudientes.js"></script>
 </body>
 </html>

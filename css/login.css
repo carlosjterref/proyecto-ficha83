@@ -1,4 +1,4 @@
-/* =============================================
+﻿/* =============================================
    LOGIN.CSS
    Pantallas de ingreso: acudientes, estudiantes y docentes
    Depende de: global.css
@@ -7,7 +7,7 @@
 /* ── Fondos de login por rol ── */
 .login-acudiente {
     min-height: 100vh;
-    background-image: url("../Colegio.JPG");
+    background-image: url("../img/Colegio.JPG");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -18,7 +18,7 @@
 
 .login-estudiante {
     min-height: 100vh;
-    background-image: url("../login-estudiante.jpg");
+    background-image: url("../img/login-estudiante.jpg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -30,7 +30,7 @@
 /* Vista login docentes */
 #vista-login {
     min-height: 100vh;
-    background-image: url("../Colegio.JPG");
+    background-image: url("../img/Colegio.JPG");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
