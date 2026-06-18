@@ -9,6 +9,7 @@ const pool = mysql.createPool({
   port:     process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
+  charset: 'utf8mb4',   // soporte completo de acentos y ñ en español
 });
 
 module.exports = pool.promise();

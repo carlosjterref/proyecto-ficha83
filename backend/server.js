@@ -1,5 +1,6 @@
 const express = require('express');
 const cors    = require('cors');
+const path    = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -7,6 +8,10 @@ const app = express();
 // Middlewares globales
 app.use(cors());
 app.use(express.json());
+
+// Servir el frontend estático (HTML, CSS, JS, imágenes)
+// Así todo corre bajo http://localhost:3000 y se evitan problemas de CORS / file://
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Rutas
 app.use('/api/auth',           require('./routes/auth'));
@@ -16,9 +21,11 @@ app.use('/api/acudientes',     require('./routes/acudientes'));
 app.use('/api/materias',       require('./routes/materias'));
 app.use('/api/notas',          require('./routes/notas'));
 app.use('/api/comunicaciones', require('./routes/comunicaciones'));
+app.use('/api/noticias',       require('./routes/noticias'));
+app.use('/api/circulares',     require('./routes/circulares'));
 
-// Ruta base
-app.get('/', (req, res) => {
+// Endpoint de salud para comprobar que la API responde
+app.get('/api/health', (req, res) => {
   res.json({ mensaje: 'API Colegio Yermo y Parres activa.' });
 });
 

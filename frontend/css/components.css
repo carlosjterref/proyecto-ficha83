@@ -329,3 +329,26 @@
     .sidebar.open { transform: translateX(0); }
     .main-content { margin-left: 0; width: 100%; }
 }
+
+/* ── MENSAJES EXPANDIBLES ── */
+.message-card { cursor: pointer; transition: box-shadow .15s ease; }
+.message-card:hover { box-shadow: 0 .3rem .75rem rgba(0,0,0,.12) !important; }
+
+/* Colapsado: muestra solo 2 líneas del cuerpo */
+.message-card .msg-cuerpo {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* Expandido: muestra el mensaje completo */
+.message-card.expandida .msg-cuerpo {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+.message-card .toggle-hint {
+    display: inline-block;
+    margin-top: .4rem;
+    color: var(--verde);
+    font-size: .8rem;
+}

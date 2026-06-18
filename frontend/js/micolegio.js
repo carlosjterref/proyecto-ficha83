@@ -78,4 +78,69 @@ document.addEventListener('DOMContentLoaded', function () {
         fadeEls.forEach(function (el) { el.classList.add('visible'); });
     }
 
+    /* ── 4. NOTICIAS Y ACTUALIDAD (públicas) ────────────────── */
+    cargarNoticiasPublicas();
+
 });
+
+// Convierte un enlace de YouTube a su formato "embed" para el iframe
+function youtubeEmbed(url) {
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+    return m ? 'https://www.youtube.com/embed/' + m[1] : null;
+}
+
+// Escapa HTML básico (por si api.js no estuviera disponible)
+function esc(t) {
+    const d = document.createElement('div');
+    d.textContent = t == null ? '' : String(t);
+    return d.innerHTML;
+}
+
+async function cargarNoticiasPublicas() {
+    const cont = document.getElementById('cont-noticias');
+    if (!cont) return;
+
+    try {
+        const noticias = await apiFetch('/noticias');
+
+        if (noticias.length === 0) {
+            cont.innerHTML = '<p class="text-muted text-center">Próximamente publicaremos novedades.</p>';
+            return;
+        }
+
+        cont.innerHTML = noticias.map(function (n) {
+            // Bloque multimedia según el tipo
+            let media = '';
+            if (n.tipoMedia === 'imagen' && n.mediaUrl) {
+                media = `<img src="${esc(n.mediaUrl)}" alt="${esc(n.titulo)}"
+                              style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0;">`;
+            } else if (n.tipoMedia === 'video' && n.mediaUrl) {
+                const embed = youtubeEmbed(n.mediaUrl);
+                if (embed) {
+                    media = `<div class="ratio ratio-16x9"><iframe src="${embed}" title="${esc(n.titulo)}"
+                                  allowfullscreen style="border:0;border-radius:8px 8px 0 0;"></iframe></div>`;
+                }
+            }
+
+            const fecha = new Date(n.fechaPublicacion).toLocaleDateString('es-CO', {
+                day: '2-digit', month: 'long', year: 'numeric'
+            });
+
+            return `
+                <div class="col-lg-4 col-md-6">
+                    <div class="pastoral-card h-100">
+                        ${media}
+                        <div class="card-body">
+                            <span class="badge mb-2" style="background:var(--verde)">${esc(n.categoria)}</span>
+                            <h3 class="mc-card-title">${esc(n.titulo)}</h3>
+                            <p>${esc(n.contenido)}</p>
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>${fecha}</small>
+                        </div>
+                    </div>
+                </div>`;
+        }).join('');
+    } catch (err) {
+        cont.innerHTML = `<p class="text-danger text-center">No se pudieron cargar las noticias.</p>`;
+        console.error(err);
+    }
+}

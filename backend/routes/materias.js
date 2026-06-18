@@ -52,6 +52,29 @@ router.get('/grado/:grado', verificarToken, async (req, res) => {
   }
 });
 
+// GET /api/materias/:id/alumnos  — alumnos inscritos en una materia (con su nota si existe)
+router.get('/:id/alumnos', verificarToken, async (req, res) => {
+  const { periodo } = req.query; // opcional: filtra la nota por periodo
+  try {
+    const [filas] = await db.query(
+      `SELECT a.idAlumno, a.nombre, a.apellido, a.documento, a.grado,
+              n.idNota, n.calificacion, n.periodo
+       FROM materia_alumno ma
+       INNER JOIN alumno a ON ma.idAlumno = a.idAlumno
+       LEFT JOIN nota n
+         ON n.idAlumno = a.idAlumno
+        AND n.idMateria = ma.idMateria
+        AND (? IS NULL OR n.periodo = ?)
+       WHERE ma.idMateria = ?
+       ORDER BY a.apellido, a.nombre`,
+      [periodo || null, periodo || null, req.params.id]
+    );
+    res.json(filas);
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al obtener alumnos de la materia.' });
+  }
+});
+
 // POST /api/materias  — solo docentes
 router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
   const { nombre, grado, idDocente } = req.body;

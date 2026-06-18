@@ -15,27 +15,29 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    let tabla, idCampo, condicion;
+    let tabla, idCampo;
 
     if (rol === 'alumno') {
-      tabla     = 'alumno';
-      idCampo   = 'idAlumno';
-      condicion = 'usuario = ? OR correo = ?';     // entra por usuario o correo
+      tabla   = 'alumno';
+      idCampo = 'idAlumno';
     } else if (rol === 'docente') {
-      tabla     = 'docente';
-      idCampo   = 'idDocente';
-      condicion = 'usuario = ? OR correo = ?';     // entra por usuario o correo
+      tabla   = 'docente';
+      idCampo = 'idDocente';
     } else if (rol === 'acudiente') {
-      tabla     = 'padreacudiente';
-      idCampo   = 'idPadre';
-      condicion = 'usuario = ? OR documento = ?';  // entra por usuario o documento
+      tabla   = 'padreacudiente';
+      idCampo = 'idPadre';
+    } else if (rol === 'admin') {
+      tabla   = 'administrador';
+      idCampo = 'idAdmin';
     } else {
       return res.status(400).json({ mensaje: 'Rol no válido.' });
     }
 
+    // Las tres tablas comparten los campos de identidad: usuario, correo y documento.
+    // El usuario puede ingresar con cualquiera de los tres.
     const [filas] = await db.query(
-      `SELECT * FROM ${tabla} WHERE ${condicion}`,
-      [usuario, usuario]   // el mismo valor se compara contra ambas columnas
+      `SELECT * FROM ${tabla} WHERE usuario = ? OR correo = ? OR documento = ?`,
+      [usuario, usuario, usuario]   // el mismo valor se compara contra los tres campos
     );
 
     if (filas.length === 0) {
