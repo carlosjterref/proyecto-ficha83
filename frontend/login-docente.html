@@ -51,15 +51,20 @@
     </div>
 </div>
 
+<script src="js/api.js"></script>
 <script>
-    function iniciarSesion() {
-        const correo = document.getElementById('login-correo').value;
+    async function iniciarSesion() {
+        const correo = document.getElementById('login-correo').value.trim();
         const pass   = document.getElementById('login-pass').value;
         if (!correo || !pass) { alert('Complete todos los campos.'); return; }
 
-        // Guardar datos del docente y redirigir al dashboard
-        sessionStorage.setItem('docente-correo', correo);
-        window.location.href = 'dashboard-docente.html';
+        try {
+            // Llama al backend, valida contra MySQL y guarda el token JWT
+            await login(correo, pass, 'docente');
+            window.location.href = 'dashboard-docente.html';
+        } catch (err) {
+            alert(err.message); // ej: "Credenciales incorrectas."
+        }
     }
 
     // Enter para iniciar sesión

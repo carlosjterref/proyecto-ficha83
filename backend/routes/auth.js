@@ -15,24 +15,27 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    let tabla, idCampo;
+    let tabla, idCampo, condicion;
 
     if (rol === 'alumno') {
-      tabla   = 'alumno';
-      idCampo = 'idAlumno';
+      tabla     = 'alumno';
+      idCampo   = 'idAlumno';
+      condicion = 'usuario = ? OR correo = ?';     // entra por usuario o correo
     } else if (rol === 'docente') {
-      tabla   = 'docente';
-      idCampo = 'idDocente';
+      tabla     = 'docente';
+      idCampo   = 'idDocente';
+      condicion = 'usuario = ? OR correo = ?';     // entra por usuario o correo
     } else if (rol === 'acudiente') {
-      tabla   = 'padreacudiente';
-      idCampo = 'idPadre';
+      tabla     = 'padreacudiente';
+      idCampo   = 'idPadre';
+      condicion = 'usuario = ? OR documento = ?';  // entra por usuario o documento
     } else {
       return res.status(400).json({ mensaje: 'Rol no válido.' });
     }
 
     const [filas] = await db.query(
-      `SELECT * FROM ${tabla} WHERE usuario = ?`,
-      [usuario]
+      `SELECT * FROM ${tabla} WHERE ${condicion}`,
+      [usuario, usuario]   // el mismo valor se compara contra ambas columnas
     );
 
     if (filas.length === 0) {
