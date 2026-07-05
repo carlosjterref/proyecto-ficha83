@@ -23,6 +23,7 @@ app.use('/api/notas',          require('./routes/notas'));
 app.use('/api/comunicaciones', require('./routes/comunicaciones'));
 app.use('/api/noticias',       require('./routes/noticias'));
 app.use('/api/circulares',     require('./routes/circulares'));
+app.use('/api/inscripciones',  require('./routes/inscripciones'));
 
 // Endpoint de salud para comprobar que la API responde
 app.get('/api/health', (req, res) => {

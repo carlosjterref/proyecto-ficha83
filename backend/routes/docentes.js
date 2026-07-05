@@ -16,6 +16,21 @@ router.get('/', verificarToken, async (req, res) => {
   }
 });
 
+// GET /api/docentes/plantel  — PÚBLICO: directorio de docentes para el sitio
+router.get('/plantel', async (req, res) => {
+  try {
+    const [filas] = await db.query(
+      `SELECT idDocente, nombre, especialidad, cursoPrincipal
+       FROM docente
+       WHERE cursoPrincipal IS NOT NULL
+       ORDER BY especialidad, nombre`
+    );
+    res.json(filas);
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al obtener el plantel.' });
+  }
+});
+
 // GET /api/docentes/:id
 router.get('/:id', verificarToken, async (req, res) => {
   try {

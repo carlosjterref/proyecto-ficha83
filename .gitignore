@@ -1,0 +1,14 @@
+# Dependencias
+backend/node_modules/
+node_modules/
+
+# Variables de entorno (secretos)
+backend/.env
+.env
+
+# Configuración local de herramientas
+.claude/
+
+# Logs y temporales
+*.log
+.DS_Store
