@@ -2,8 +2,6 @@
 -- ESQUEMA COMPLETO - Base de datos "proyecto"
 -- Colegio Yermo y Parres
 -- Generado desde la BD real (SHOW CREATE TABLE).
--- Uso: en phpMyAdmin crea la BD "proyecto", selecciónala,
---      pestaña SQL, pega este archivo y Continuar.
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS proyecto DEFAULT CHARACTER SET utf8mb4;

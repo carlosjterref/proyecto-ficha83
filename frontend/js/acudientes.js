@@ -33,8 +33,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     cargarMensajes();
     cargarNotas();
+    cargarComunicadosEn('lista-comunicados'); // función compartida de api.js
     configurarFormularioMensaje();
 });
+
+// Cambia la contraseña del acudiente (usa el endpoint compartido)
+async function guardarPassword(event) {
+    event.preventDefault();
+    const actual    = document.getElementById('pass-actual').value;
+    const nueva      = document.getElementById('pass-nueva').value;
+    const confirmar = document.getElementById('pass-confirmar').value;
+
+    if (nueva !== confirmar) { alert('La nueva contraseña y su confirmación no coinciden.'); return; }
+
+    try {
+        const r = await cambiarContrasena(actual, nueva);
+        alert(r.mensaje);
+        document.getElementById('form-password').reset();
+    } catch (err) {
+        alert(err.message);
+    }
+}
 
 function iniciales(nombre) {
     return nombre.trim().split(/\s+/).slice(0, 2).map(p => p[0].toUpperCase()).join('');
@@ -161,7 +180,8 @@ function mostrarSeccion(id, link) {
     const titulos = {
         bandeja: 'Bandeja de Entrada',
         notas: 'Notas del Estudiante',
-        comunicados: 'Comunicados Generales'
+        comunicados: 'Comunicados Generales',
+        configuracion: 'Configuración'
     };
     document.querySelector('.top-bar h2').innerHTML =
         '<i class="bi bi-envelope me-2"></i>' + (titulos[id] || id);

@@ -81,6 +81,46 @@ function exigirSesion(rolEsperado, loginUrl) {
   return usuario;
 }
 
+/* ---------- CAMBIO DE CONTRASEÑA (compartido) ---------- */
+
+// Cambia la contraseña del usuario autenticado
+async function cambiarContrasena(actual, nueva) {
+  return apiFetch('/auth/password', {
+    method: 'PUT',
+    body: JSON.stringify({ actual, nueva }),
+  });
+}
+
+/* ---------- COMUNICADOS / NOTICIAS (compartido) ---------- */
+
+// Carga las noticias públicas y las muestra como comunicados en un contenedor
+async function cargarComunicadosEn(contId) {
+  const cont = document.getElementById(contId);
+  if (!cont) return;
+  try {
+    const noticias = await apiFetch('/noticias');
+
+    if (noticias.length === 0) {
+      cont.innerHTML = '<p class="text-muted">No hay comunicados por el momento.</p>';
+      return;
+    }
+
+    cont.innerHTML = noticias.map(n => `
+      <div class="message-card p-3 mb-3 shadow-sm">
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <span class="sender-name"><i class="bi bi-megaphone me-1"></i>${escaparHtml(n.categoria)}</span>
+          <span class="msg-date"><i class="bi bi-clock me-1"></i>${formatearFechaMsg(n.fechaPublicacion)}</span>
+        </div>
+        <p class="msg-subject mb-1 fw-bold">${escaparHtml(n.titulo)}</p>
+        <p class="mb-0" style="white-space:pre-wrap;">${escaparHtml(n.contenido)}</p>
+        <small class="text-muted">Publicado por ${escaparHtml(n.autor)}</small>
+      </div>
+    `).join('');
+  } catch (err) {
+    cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+  }
+}
+
 /* ---------- BANDEJA DE MENSAJES (compartida entre portales) ---------- */
 
 // Escapa caracteres HTML para evitar inyección desde el contenido del mensaje

@@ -40,9 +40,8 @@ async function cargarCursos() {
         renderCursos();
         llenarSelectCursos();
 
-        // Actualiza la tarjeta de estadística "Cursos asignados"
-        const statCursos = document.querySelector('#sec-resumen .stat-num');
-        if (statCursos) statCursos.textContent = misCursos.length;
+        // Actualiza la tarjeta "Cursos asignados"
+        document.getElementById('stat-cursos').textContent = misCursos.length;
     } catch (err) {
         console.error('Error al cargar cursos:', err.message);
     }
@@ -183,32 +182,79 @@ async function guardarNotas() {
 
 /* ---------- MENSAJES ---------- */
 
-// Carga los mensajes recibidos (función compartida de api.js) y actualiza el badge
+// Carga los mensajes recibidos (función compartida de api.js) y actualiza
+// el badge del menú, la tarjeta del resumen y el panel de mensajes recientes.
 async function cargarMensajesDoc() {
     const mensajes = await cargarMensajesEn('lista-mensajes');
     const noLeidos = mensajes.filter(m => m.leida === 0).length;
 
-    // Actualiza el contador del menú lateral (la insignia junto a "Mensajes")
+    // Insignia del menú lateral (junto a "Mensajes")
     const badge = document.querySelector('.sidebar-menu .nav-link .badge');
     if (badge) {
         badge.textContent = noLeidos;
         badge.style.display = noLeidos > 0 ? '' : 'none';
     }
+
+    // Tarjeta "Mensajes nuevos" del Resumen
+    const statMsg = document.getElementById('stat-mensajes');
+    if (statMsg) statMsg.textContent = noLeidos;
+
+    // Panel "Mensajes recientes" (los 4 más recientes)
+    renderPanelMensajes(mensajes.slice(0, 4));
 }
 
-// Reúne los alumnos de todos los cursos del docente (sin duplicados) y llena el <select>
+// Pinta los mensajes recientes en el Resumen (clic abre el pop-up compartido)
+function renderPanelMensajes(mensajes) {
+    const cont = document.getElementById('panel-mensajes-recientes');
+    if (!cont) return;
+
+    if (mensajes.length === 0) {
+        cont.innerHTML = '<p class="text-muted mb-0">No tiene mensajes.</p>';
+        return;
+    }
+
+    cont.innerHTML = `<ul class="list-unstyled mb-0" style="font-size:0.88rem;">` +
+        mensajes.map(m => `
+            <li class="d-flex gap-2 align-items-start mb-3" style="cursor:pointer;" onclick="abrirMensaje(${m.idMensaje})">
+                <i class="bi ${m.leida ? 'bi-envelope-open text-muted' : 'bi-envelope-fill'} mt-1" style="${m.leida ? '' : 'color:var(--verde)'}"></i>
+                <div>
+                    <strong>${m.emisorTipo}</strong>${m.tipo ? ' — ' + m.tipo : ''}<br>
+                    <small class="text-muted">${formatearFechaMsg(m.fechaHora)}</small>
+                </div>
+            </li>`).join('') +
+        `</ul>`;
+}
+
+// Reúne los alumnos de todos los cursos del docente (sin duplicados),
+// llena el <select> de mensajes y calcula las estadísticas del Resumen.
 async function cargarEstudiantes() {
     const mapa = new Map();
+    let totalPendientes = 0;          // pares alumno-curso sin ninguna nota
+    const resumenCursos = [];          // datos por curso para el panel
+
     for (const curso of misCursos) {
         try {
             const alumnos = await apiFetch(`/materias/${curso.idMateria}/alumnos`);
-            alumnos.forEach(a => mapa.set(a.idAlumno, a));
+
+            // Un alumno puede venir repetido si tiene varias notas; deduplicamos por curso
+            const enCurso   = new Set();
+            const conNota   = new Set();
+            alumnos.forEach(a => {
+                mapa.set(a.idAlumno, a);
+                enCurso.add(a.idAlumno);
+                if (a.idNota) conNota.add(a.idAlumno);
+            });
+
+            const pendientes = enCurso.size - conNota.size;
+            totalPendientes += pendientes;
+            resumenCursos.push({ nombre: curso.nombre, grado: curso.grado, estudiantes: enCurso.size, pendientes });
         } catch (err) {
             console.error('Error al cargar alumnos del curso', curso.idMateria, err.message);
         }
     }
     misEstudiantes = [...mapa.values()];
 
+    // Llenar el <select> de destinatarios del modal de mensajes
     const sel = document.getElementById('msg-destinatario');
     if (sel) {
         sel.innerHTML = '<option value="todos">Todos mis estudiantes</option>' +
@@ -216,6 +262,35 @@ async function cargarEstudiantes() {
                 `<option value="${a.idAlumno}">${a.nombre} ${a.apellido}</option>`
             ).join('');
     }
+
+    // Tarjetas del Resumen
+    document.getElementById('stat-estudiantes').textContent = misEstudiantes.length;
+    document.getElementById('stat-pendientes').textContent = totalPendientes;
+
+    // Panel "Resumen de cursos"
+    renderPanelCursos(resumenCursos);
+}
+
+// Pinta el panel con un resumen de cada curso (estudiantes y notas pendientes)
+function renderPanelCursos(resumen) {
+    const cont = document.getElementById('panel-cursos');
+    if (!cont) return;
+
+    if (resumen.length === 0) {
+        cont.innerHTML = '<p class="text-muted mb-0">No tiene cursos asignados.</p>';
+        return;
+    }
+
+    cont.innerHTML = `<ul class="list-unstyled mb-0" style="font-size:0.88rem;">` +
+        resumen.map(c => `
+            <li class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom:1px solid #f0f0f0">
+                <div><strong>${c.nombre}</strong> — Grado ${c.grado}<br>
+                    <small class="text-muted">${c.estudiantes} estudiante(s)</small></div>
+                <span class="badge" style="background:${c.pendientes > 0 ? '#fdecea' : '#e8f5eb'};color:${c.pendientes > 0 ? '#c0392b' : 'var(--verde)'}">
+                    ${c.pendientes > 0 ? c.pendientes + ' pendiente(s)' : 'Al día'}
+                </span>
+            </li>`).join('') +
+        `</ul>`;
 }
 
 // Envía un mensaje nuevo a un estudiante o a todos los estudiantes del docente

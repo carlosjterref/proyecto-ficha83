@@ -23,6 +23,7 @@
             <li class="nav-item"><a href="#" class="nav-link active" onclick="mostrarSeccion('bandeja', this)"><i class="bi bi-inbox me-2"></i>Bandeja de Entrada</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('notas', this)"><i class="bi bi-journal-text me-2"></i>Notas del Estudiante</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('comunicados', this)"><i class="bi bi-megaphone me-2"></i>Comunicados Generales</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="mostrarSeccion('configuracion', this)"><i class="bi bi-gear me-2"></i>Configuración</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="cerrarSesion('login-acudientes.html'); return false;"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a></li>
         </ul>
         <div class="user-bar d-flex align-items-center gap-2">
@@ -64,7 +65,35 @@
 
         <!-- COMUNICADOS -->
         <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-comunicados" style="overflow-y:auto;">
-            <p class="text-muted">No hay comunicados generales.</p>
+            <h5 class="fw-bold mb-3" style="color:var(--verde)">Comunicados Generales</h5>
+            <div id="lista-comunicados">
+                <p class="text-muted">Cargando comunicados...</p>
+            </div>
+        </section>
+
+        <!-- CONFIGURACIÓN -->
+        <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-configuracion" style="overflow-y:auto;">
+            <h5 class="fw-bold mb-3" style="color:var(--verde)">Configuración</h5>
+            <div class="card shadow-sm border-0 p-4" style="max-width:480px;">
+                <h6 class="fw-bold border-bottom pb-2 mb-3"><i class="bi bi-shield-lock me-2"></i>Cambiar contraseña</h6>
+                <form id="form-password" onsubmit="guardarPassword(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Contraseña actual</label>
+                        <input type="password" class="form-control" id="pass-actual" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="pass-nueva" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="pass-confirmar" required>
+                    </div>
+                    <button type="submit" class="btn btn-sm fw-bold text-white" style="background:var(--verde)">
+                        <i class="bi bi-check-lg me-1"></i>Actualizar contraseña
+                    </button>
+                </form>
+            </div>
         </section>
 
         <div class="p-3" style="background:#f4f7f6;">

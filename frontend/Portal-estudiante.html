@@ -59,13 +59,35 @@
 
         <!-- COMUNICADOS -->
     <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-comunicados" style="overflow-y:auto;">
-            <p class="text-muted">No hay comunicados generales.</p>
+            <h5 class="fw-bold mb-3" style="color:var(--verde)">Comunicados Generales</h5>
+            <div id="lista-comunicados">
+                <p class="text-muted">Cargando comunicados...</p>
+            </div>
     </section>
 
         <!-- CONFIGURACIÓN -->
     <section class="seccion flex-grow-1 p-3 p-md-4" id="sec-configuracion" style="overflow-y:auto;">
             <h5 class="fw-bold mb-3" style="color:var(--verde)">Configuración</h5>
-            <p class="text-muted">Opciones de configuración próximamente.</p>
+            <div class="card shadow-sm border-0 p-4" style="max-width:480px;">
+                <h6 class="fw-bold border-bottom pb-2 mb-3"><i class="bi bi-shield-lock me-2"></i>Cambiar contraseña</h6>
+                <form id="form-password" onsubmit="guardarPassword(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Contraseña actual</label>
+                        <input type="password" class="form-control" id="pass-actual" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="pass-nueva" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:0.85rem;">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="pass-confirmar" required>
+                    </div>
+                    <button type="submit" class="btn btn-sm fw-bold text-white" style="background:var(--verde)">
+                        <i class="bi bi-check-lg me-1"></i>Actualizar contraseña
+                    </button>
+                </form>
+            </div>
     </section>
 
         <!-- NOTAS -->

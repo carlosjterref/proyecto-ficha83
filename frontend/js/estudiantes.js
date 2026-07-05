@@ -20,7 +20,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Cargar datos iniciales
     cargarMensajes();
     cargarNotas();
+    cargarComunicadosEn('lista-comunicados'); // función compartida de api.js
 });
+
+// Cambia la contraseña del estudiante (usa el endpoint compartido)
+async function guardarPassword(event) {
+    event.preventDefault();
+    const actual    = document.getElementById('pass-actual').value;
+    const nueva      = document.getElementById('pass-nueva').value;
+    const confirmar = document.getElementById('pass-confirmar').value;
+
+    if (nueva !== confirmar) { alert('La nueva contraseña y su confirmación no coinciden.'); return; }
+
+    try {
+        const r = await cambiarContrasena(actual, nueva);
+        alert(r.mensaje);
+        document.getElementById('form-password').reset();
+    } catch (err) {
+        alert(err.message);
+    }
+}
 
 // Genera iniciales a partir del nombre (ej: "Paula Andrea" -> "PA")
 function iniciales(nombre) {

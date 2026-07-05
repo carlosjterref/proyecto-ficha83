@@ -74,7 +74,7 @@
                         <div class="stat-card">
                             <div class="stat-icon"><i class="bi bi-journal-bookmark"></i></div>
                             <div>
-                                <div class="stat-num">4</div>
+                                <div class="stat-num" id="stat-cursos">—</div>
                                 <div class="stat-label">Cursos asignados</div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                 <i class="bi bi-people"></i>
                             </div>
                             <div>
-                                <div class="stat-num" style="color:#b07d00">128</div>
+                                <div class="stat-num" style="color:#b07d00" id="stat-estudiantes">—</div>
                                 <div class="stat-label">Estudiantes</div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                                 <i class="bi bi-chat-dots"></i>
                             </div>
                             <div>
-                                <div class="stat-num" style="color:#1565c0">3</div>
+                                <div class="stat-num" style="color:#1565c0" id="stat-mensajes">—</div>
                                 <div class="stat-label">Mensajes nuevos</div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                                 <i class="bi bi-exclamation-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-num" style="color:#c0392b">7</div>
+                                <div class="stat-num" style="color:#c0392b" id="stat-pendientes">—</div>
                                 <div class="stat-label">Notas pendientes</div>
                             </div>
                         </div>
@@ -118,60 +118,26 @@
                     <div class="col-lg-6">
                         <div class="panel-card">
                             <div class="panel-header">
-                                <i class="bi bi-clock-history"></i>
-                                <h3>Actividad reciente</h3>
+                                <i class="bi bi-journal-bookmark"></i>
+                                <h3>Resumen de cursos</h3>
                             </div>
                             <div class="panel-body">
-                                <ul class="list-unstyled mb-0" style="font-size:0.88rem;">
-                                    <li class="d-flex gap-2 align-items-start mb-3">
-                                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
-                                        <div><strong>Notas ingresadas</strong> — Matemáticas 8°A<br>
-                                            <small class="text-muted">Hoy, 9:30 AM</small></div>
-                                    </li>
-                                    <li class="d-flex gap-2 align-items-start mb-3">
-                                        <i class="bi bi-chat-fill mt-1" style="color:var(--amarillo)"></i>
-                                        <div><strong>Mensaje recibido</strong> — Coordinación académica<br>
-                                            <small class="text-muted">Ayer, 3:15 PM</small></div>
-                                    </li>
-                                    <li class="d-flex gap-2 align-items-start mb-3">
-                                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
-                                        <div><strong>Notas ingresadas</strong> — Ciencias 7°B<br>
-                                            <small class="text-muted">Lun 12 May, 11:00 AM</small></div>
-                                    </li>
-                                    <li class="d-flex gap-2 align-items-start">
-                                        <i class="bi bi-exclamation-circle-fill mt-1" style="color:#c0392b"></i>
-                                        <div><strong>Notas pendientes</strong> — Matemáticas 9°A<br>
-                                            <small class="text-muted">Vence: Vie 23 May</small></div>
-                                    </li>
-                                </ul>
+                                <div id="panel-cursos">
+                                    <p class="text-muted mb-0">Cargando...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="panel-card">
                             <div class="panel-header">
-                                <i class="bi bi-calendar3"></i>
-                                <h3>Próximas entregas</h3>
+                                <i class="bi bi-chat-dots"></i>
+                                <h3>Mensajes recientes</h3>
                             </div>
                             <div class="panel-body">
-                                <ul class="list-unstyled mb-0" style="font-size:0.88rem;">
-                                    <li class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom:1px solid #f0f0f0">
-                                        <div><strong>Notas P2</strong> — Matemáticas 9°A</div>
-                                        <span class="badge" style="background:#fdecea;color:#c0392b">23 May</span>
-                                    </li>
-                                    <li class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom:1px solid #f0f0f0">
-                                        <div><strong>Notas P2</strong> — Matemáticas 6°C</div>
-                                        <span class="badge" style="background:#fff3e0;color:#e65100">28 May</span>
-                                    </li>
-                                    <li class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom:1px solid #f0f0f0">
-                                        <div><strong>Notas P2</strong> — Ciencias 7°B</div>
-                                        <span class="badge" style="background:#e8f5eb;color:var(--verde)">30 May</span>
-                                    </li>
-                                    <li class="d-flex justify-content-between align-items-center">
-                                        <div><strong>Notas P2</strong> — Matemáticas 8°A</div>
-                                        <span class="badge" style="background:#e8f5eb;color:var(--verde)">2 Jun</span>
-                                    </li>
-                                </ul>
+                                <div id="panel-mensajes-recientes">
+                                    <p class="text-muted mb-0">Cargando...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
