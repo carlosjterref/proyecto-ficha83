@@ -3,8 +3,10 @@
    Se incluye en todas las páginas que necesiten hablar con la API.
    ============================================= */
 
-// URL base del backend (Express corriendo en el puerto 3000)
-const API_URL = 'http://localhost:3000/api';
+// URL base del backend. Ruta relativa: funciona tanto en local
+// (http://localhost:3000/api) como desplegado (https://tu-dominio/api),
+// porque Express sirve el frontend y la API en el mismo origen.
+const API_URL = '/api';
 
 /* ---------- Manejo del token y la sesión ---------- */
 
