@@ -81,7 +81,50 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── 4. NOTICIAS Y ACTUALIDAD (públicas) ────────────────── */
     cargarNoticiasPublicas();
 
+    /* ── 5. DÍAS FESTIVOS (consumo de API externa) ──────────── */
+    cargarFestivos();
+
 });
+
+// Carga los días festivos desde nuestro endpoint, que a su vez
+// consume la API externa Nager.Date (servicio de consumo de API).
+async function cargarFestivos() {
+    const cont = document.getElementById('cont-festivos');
+    if (!cont) return;
+
+    const anio = new Date().getFullYear();
+    const titulo = document.getElementById('titulo-festivos');
+    if (titulo) titulo.textContent = 'Días Festivos en Colombia ' + anio;
+
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+
+    try {
+        const festivos = await apiFetch('/festivos?anio=' + anio);
+
+        if (!festivos.length) {
+            cont.innerHTML = '<p class="text-muted text-center">No hay festivos para mostrar.</p>';
+            return;
+        }
+
+        cont.innerHTML = festivos.map(function (f) {
+            const p = f.fecha.split('-');            // ["2026","01","01"]
+            const dia = p[2], mes = meses[parseInt(p[1], 10) - 1];
+            return `
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="d-flex align-items-center gap-3 p-2 shadow-sm rounded bg-white h-100">
+                        <div class="text-center flex-shrink-0" style="min-width:52px;">
+                            <div class="fw-bold" style="font-size:1.4rem;line-height:1;color:var(--verde)">${dia}</div>
+                            <div class="text-uppercase text-muted" style="font-size:0.72rem;">${mes}</div>
+                        </div>
+                        <div style="font-size:0.85rem;line-height:1.2;">${esc(f.nombre)}</div>
+                    </div>
+                </div>`;
+        }).join('');
+    } catch (err) {
+        cont.innerHTML = '<p class="text-danger text-center">No se pudieron cargar los festivos.</p>';
+        console.error(err);
+    }
+}
 
 // Convierte un enlace de YouTube a su formato "embed" para el iframe
 function youtubeEmbed(url) {

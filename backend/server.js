@@ -24,6 +24,7 @@ app.use('/api/comunicaciones', require('./routes/comunicaciones'));
 app.use('/api/noticias',       require('./routes/noticias'));
 app.use('/api/circulares',     require('./routes/circulares'));
 app.use('/api/inscripciones',  require('./routes/inscripciones'));
+app.use('/api/festivos',       require('./routes/festivos'));
 
 // Endpoint de salud para comprobar que la API responde
 app.get('/api/health', (req, res) => {

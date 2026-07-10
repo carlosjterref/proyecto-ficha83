@@ -11,7 +11,15 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 async function cargar() {
-  const sql = fs.readFileSync(path.join(__dirname, 'esquema.sql'), 'utf8');
+  let sql = fs.readFileSync(path.join(__dirname, 'esquema.sql'), 'utf8');
+
+  // Quitar las líneas CREATE DATABASE y USE: en un hosting (p. ej. Railway)
+  // la base de datos ya existe con otro nombre (railway), así que las tablas
+  // se crean en la base de datos a la que nos conectamos (DB_NAME).
+  sql = sql
+    .split('\n')
+    .filter(l => !/^\s*CREATE DATABASE/i.test(l) && !/^\s*USE\s/i.test(l))
+    .join('\n');
 
   // Conexión con multipleStatements para ejecutar todo el script de una vez
   const conn = await mysql.createConnection({
