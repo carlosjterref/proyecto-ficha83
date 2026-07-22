@@ -1,0 +1,46 @@
+# Configuración de despliegue para Render (Blueprint)
+# Documenta el servicio y sus variables. Render puede leerlo automáticamente
+# o puedes configurar lo mismo a mano desde el panel.
+#
+# Nota: la base de datos MySQL es EXTERNA (Render no ofrece MySQL).
+# Las variables marcadas con "sync: false" se cargan manualmente en el panel
+# de Render para no exponer secretos en el repositorio.
+
+services:
+  - type: web
+    name: colegio-yermo-parres
+    runtime: node
+    plan: free
+    branch: main
+
+    # El backend se instala desde la raíz del monorepo
+    buildCommand: npm run build
+    startCommand: npm start
+
+    # Render usa este endpoint para saber si la app está viva
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+
+      # ---- Base de datos MySQL externa (configurar en el panel) ----
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_PORT
+        sync: false
+
+      # ---- Autenticación ----
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 8h
+
+    # PORT lo inyecta Render automáticamente; server.js ya lo respeta
+    #   const PORT = process.env.PORT || 3000;
