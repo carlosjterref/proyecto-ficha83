@@ -2,9 +2,14 @@
 backend/node_modules/
 node_modules/
 
-# Variables de entorno (secretos)
-backend/.env
+# Variables de entorno (secretos) - cubre .env, .env.railway, .env.local, etc.
 .env
+.env.*
+backend/.env
+backend/.env.*
+# Excepción: la plantilla SÍ debe versionarse
+!.env.example
+!backend/.env.example
 
 # Configuración local de herramientas
 .claude/
