@@ -1,14 +1,36 @@
 /* =============================================
    CARGAR-ESQUEMA.JS
-   Ejecuta scripts/esquema.sql contra la base de datos configurada
-   en el .env (útil para inicializar una BD nueva, p. ej. en Railway).
-   Uso: node scripts/cargar-esquema.js
+   Ejecuta scripts/esquema.sql contra una base de datos.
+
+   ⚠️ OPERACIÓN DESTRUCTIVA: el esquema hace DROP TABLE de las 11 tablas.
+
+   Uso:
+     node scripts/cargar-esquema.js               -> usa el .env (base local)
+     node scripts/cargar-esquema.js .env.nube     -> usa otro archivo de entorno
+
+   Si se indica un archivo y NO existe, el script se DETIENE con error,
+   para no ejecutarse por accidente contra la base equivocada.
    ============================================= */
 
 const fs    = require('fs');
 const path  = require('path');
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+
+// --- Carga del entorno (antes de requerir config/db) ---
+const archivoEnv = process.argv[2];
+if (archivoEnv) {
+  const ruta = path.join(__dirname, '..', archivoEnv);
+  if (!fs.existsSync(ruta)) {
+    console.error(`\n❌ No se encontró el archivo de entorno "${archivoEnv}".`);
+    console.error(`   Ruta esperada: ${ruta}`);
+    console.error('   Revisa el nombre (en Windows puede haberse guardado como .txt).');
+    console.error('   El script se detiene para no escribir en la base equivocada.\n');
+    process.exit(1);
+  }
+  require('dotenv').config({ path: ruta, override: true });
+} else {
+  require('dotenv').config();
+}
 
 async function cargar() {
   let sql = fs.readFileSync(path.join(__dirname, 'esquema.sql'), 'utf8');
@@ -21,15 +43,21 @@ async function cargar() {
     .filter(l => !/^\s*CREATE DATABASE/i.test(l) && !/^\s*USE\s/i.test(l))
     .join('\n');
 
-  // Conexión con multipleStatements para ejecutar todo el script de una vez
+  // Conexión con multipleStatements para ejecutar todo el script de una vez.
+  // Reutiliza la configuración central (incluye TLS si DB_SSL=true).
+  const { configuracion } = require('../config/db');
+
+  // Aviso visible del destino: evita ejecutar contra la base equivocada
+  console.log('──────────────────────────────────────────────');
+  console.log(' DESTINO de la carga (se BORRARÁN sus tablas):');
+  console.log('   Entorno : ' + (archivoEnv || '.env (por defecto)'));
+  console.log('   Host    : ' + configuracion.host);
+  console.log('   Base    : ' + configuracion.database);
+  console.log('──────────────────────────────────────────────\n');
+
   const conn = await mysql.createConnection({
-    host:     process.env.DB_HOST     || process.env.MYSQLHOST,
-    user:     process.env.DB_USER     || process.env.MYSQLUSER,
-    password: process.env.DB_PASSWORD ?? process.env.MYSQLPASSWORD ?? '',
-    database: process.env.DB_NAME     || process.env.MYSQLDATABASE,
-    port:     process.env.DB_PORT     || process.env.MYSQLPORT || 3306,
+    ...configuracion,
     multipleStatements: true,
-    charset: 'utf8mb4',
   });
 
   try {

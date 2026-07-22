@@ -19,7 +19,7 @@ const TABLAS = [
 ];
 
 function cfg(obj) {
-  return {
+  const c = {
     host:     obj.DB_HOST,
     user:     obj.DB_USER,
     password: obj.DB_PASSWORD || '',
@@ -27,16 +27,23 @@ function cfg(obj) {
     port:     obj.DB_PORT || 3306,
     charset:  'utf8mb4',
   };
+  // TLS obligatorio en varios proveedores en la nube (TiDB Cloud, etc.)
+  if (obj.DB_SSL === 'true') c.ssl = { minVersion: 'TLSv1.2', rejectUnauthorized: true };
+  return c;
 }
 
 async function migrar() {
+  // El archivo de destino se puede pasar como argumento:
+  //   node scripts/migrar-a-railway.js .env.nube
+  const archivoDestino = process.argv[2] || '.env.railway';
+
   const localEnv = dotenv.parse(fs.readFileSync(path.join(__dirname, '..', '.env')));
-  const railEnv  = dotenv.parse(fs.readFileSync(path.join(__dirname, '..', '.env.railway')));
+  const railEnv  = dotenv.parse(fs.readFileSync(path.join(__dirname, '..', archivoDestino)));
 
   const local = await mysql.createConnection(cfg(localEnv));
   const rail  = await mysql.createConnection(cfg(railEnv));
   console.log(`Origen (local): ${localEnv.DB_NAME} @ ${localEnv.DB_HOST}`);
-  console.log(`Destino (Railway): ${railEnv.DB_NAME} @ ${railEnv.DB_HOST}\n`);
+  console.log(`Destino (${archivoDestino}): ${railEnv.DB_NAME} @ ${railEnv.DB_HOST}\n`);
 
   try {
     await rail.query('SET FOREIGN_KEY_CHECKS = 0');

@@ -2,6 +2,8 @@
 -- ESQUEMA COMPLETO - Base de datos "proyecto"
 -- Colegio Yermo y Parres
 -- Generado desde la BD real (SHOW CREATE TABLE).
+-- Uso en phpMyAdmin: selecciona/crea la BD y ejecuta este script.
+-- Uso por consola:   node scripts/cargar-esquema.js [archivo.env]
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS proyecto DEFAULT CHARACTER SET utf8mb4;
@@ -23,7 +25,7 @@ CREATE TABLE `administrador` (
   UNIQUE KEY `usuario` (`usuario`),
   UNIQUE KEY `correo` (`correo`),
   UNIQUE KEY `documento` (`documento`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----- Tabla: docente -----
 DROP TABLE IF EXISTS `docente`;
@@ -32,6 +34,7 @@ CREATE TABLE `docente` (
   `nombre` varchar(100) NOT NULL,
   `documento` varchar(20) DEFAULT NULL,
   `especialidad` varchar(100) DEFAULT NULL,
+  `cursoPrincipal` varchar(20) DEFAULT NULL,
   `correo` varchar(150) DEFAULT NULL,
   `usuario` varchar(80) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
@@ -39,7 +42,7 @@ CREATE TABLE `docente` (
   UNIQUE KEY `usuario` (`usuario`),
   UNIQUE KEY `correo` (`correo`),
   UNIQUE KEY `documento` (`documento`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: alumno -----
 DROP TABLE IF EXISTS `alumno`;
@@ -75,7 +78,7 @@ CREATE TABLE `padreacudiente` (
   UNIQUE KEY `correo` (`correo`),
   KEY `fk_padre_alumno` (`idAlumno`),
   CONSTRAINT `fk_padre_alumno` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: materia -----
 DROP TABLE IF EXISTS `materia`;
@@ -88,7 +91,7 @@ CREATE TABLE `materia` (
   KEY `idx_materia_grado` (`grado`),
   KEY `idx_materia_docente` (`idDocente`),
   CONSTRAINT `fk_materia_docente` FOREIGN KEY (`idDocente`) REFERENCES `docente` (`idDocente`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: materia_alumno -----
 DROP TABLE IF EXISTS `materia_alumno`;
@@ -101,7 +104,7 @@ CREATE TABLE `materia_alumno` (
   KEY `fk_ma_alumno` (`idAlumno`),
   CONSTRAINT `fk_ma_alumno` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ma_materia` FOREIGN KEY (`idMateria`) REFERENCES `materia` (`idMateria`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: nota -----
 DROP TABLE IF EXISTS `nota`;
@@ -120,7 +123,7 @@ CREATE TABLE `nota` (
   CONSTRAINT `fk_nota_alumno` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`) ON UPDATE CASCADE,
   CONSTRAINT `fk_nota_docente` FOREIGN KEY (`idDocente`) REFERENCES `docente` (`idDocente`) ON UPDATE CASCADE,
   CONSTRAINT `fk_nota_materia` FOREIGN KEY (`idMateria`) REFERENCES `materia` (`idMateria`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: comunicacion -----
 DROP TABLE IF EXISTS `comunicacion`;
@@ -136,7 +139,7 @@ CREATE TABLE `comunicacion` (
   KEY `idx_com_emisor` (`idEmisor`),
   KEY `idx_com_fecha` (`fechaHora`),
   CONSTRAINT `fk_com_docente` FOREIGN KEY (`idEmisor`) REFERENCES `docente` (`idDocente`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: comunicacion_receptor -----
 DROP TABLE IF EXISTS `comunicacion_receptor`;
@@ -149,7 +152,7 @@ CREATE TABLE `comunicacion_receptor` (
   UNIQUE KEY `uq_mensaje_receptor` (`idMensaje`,`idReceptor`,`receptorTipo`),
   KEY `idx_cr_receptor` (`idReceptor`),
   CONSTRAINT `fk_cr_mensaje` FOREIGN KEY (`idMensaje`) REFERENCES `comunicacion` (`idMensaje`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: noticia -----
 DROP TABLE IF EXISTS `noticia`;
@@ -165,7 +168,7 @@ CREATE TABLE `noticia` (
   PRIMARY KEY (`idNoticia`),
   KEY `idAdmin` (`idAdmin`),
   CONSTRAINT `noticia_ibfk_1` FOREIGN KEY (`idAdmin`) REFERENCES `administrador` (`idAdmin`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----- Tabla: circular -----
 DROP TABLE IF EXISTS `circular`;
