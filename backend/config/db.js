@@ -1,11 +1,7 @@
 const mysql = require('mysql2');
 require('dotenv').config();
 
-// Configuración reutilizable de la conexión.
-// Lee primero las variables propias (DB_*, uso local) y, si no existen,
-// usa las que inyectan algunos servicios de despliegue (MYSQL*).
-// Si DB_SSL=true, se conecta con TLS (requerido por proveedores en la nube
-// como TiDB Cloud). En local (XAMPP) se omite y todo sigue igual.
+
 const configuracion = {
   host:     process.env.DB_HOST     || process.env.MYSQLHOST,
   user:     process.env.DB_USER     || process.env.MYSQLUSER,
