@@ -36,8 +36,14 @@ app.use((req, res) => {
   res.status(404).json({ mensaje: 'Ruta no encontrada.' });
 });
 
-// Iniciar servidor
+// Iniciar el servidor solo cuando este archivo se ejecuta directamente
+// (con "node server.js"). Al importarlo desde las pruebas (Supertest),
+// se exporta la app sin ocupar el puerto.
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
