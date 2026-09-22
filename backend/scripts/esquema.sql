@@ -137,8 +137,9 @@ CREATE TABLE `comunicacion` (
   `emisorTipo` enum('Docente','Alumno','PadreAcudiente') NOT NULL DEFAULT 'Docente',
   PRIMARY KEY (`idMensaje`),
   KEY `idx_com_emisor` (`idEmisor`),
-  KEY `idx_com_fecha` (`fechaHora`),
-  CONSTRAINT `fk_com_docente` FOREIGN KEY (`idEmisor`) REFERENCES `docente` (`idDocente`) ON UPDATE CASCADE
+  KEY `idx_com_fecha` (`fechaHora`)
+  -- Sin llave foranea en idEmisor: el emisor es polimorfico (Docente, Alumno o
+  -- PadreAcudiente segun emisorTipo) y no puede referenciar una sola tabla.
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----- Tabla: comunicacion_receptor -----
