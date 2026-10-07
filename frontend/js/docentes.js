@@ -8,6 +8,8 @@
 let docente       = null;  // datos del docente logueado
 let misCursos     = [];     // materias asignadas al docente
 let misEstudiantes = [];    // alumnos de los cursos del docente (sin duplicados)
+let misAcudientes  = [];    // acudientes de esos alumnos (con idAlumno, para filtrar por curso)
+let alumnosPorCurso = {};   // idMateria -> Set de idAlumno inscritos en ese curso
 
 // ── Inicialización ──
 document.addEventListener('DOMContentLoaded', async () => {
@@ -245,6 +247,8 @@ async function cargarEstudiantes() {
                 if (a.idNota) conNota.add(a.idAlumno);
             });
 
+            alumnosPorCurso[curso.idMateria] = enCurso;
+
             const pendientes = enCurso.size - conNota.size;
             totalPendientes += pendientes;
             resumenCursos.push({ nombre: curso.nombre, grado: curso.grado, estudiantes: enCurso.size, pendientes });
@@ -262,6 +266,9 @@ async function cargarEstudiantes() {
                 `<option value="${a.idAlumno}">${a.nombre} ${a.apellido}</option>`
             ).join('');
     }
+
+    // Acudientes de esos alumnos, para poder escribirles desde el modal de mensajes
+    await cargarAcudientes();
 
     // Tarjetas del Resumen
     document.getElementById('stat-estudiantes').textContent = misEstudiantes.length;
@@ -293,9 +300,96 @@ function renderPanelCursos(resumen) {
         `</ul>`;
 }
 
-// Envía un mensaje nuevo a un estudiante o a todos los estudiantes del docente
+/* ---------- ACUDIENTES COMO DESTINATARIOS ---------- */
+
+// Carga los acudientes y conserva solo los de los estudiantes de los cursos del docente
+async function cargarAcudientes() {
+    try {
+        const todos = await apiFetch('/acudientes');
+        const idsAlumnos = new Set(misEstudiantes.map(a => a.idAlumno));
+        misAcudientes = todos.filter(a => idsAlumnos.has(a.idAlumno));
+    } catch (err) {
+        misAcudientes = [];
+        console.error('Error al cargar acudientes:', err.message);
+    }
+
+    // Llena el selector de curso del bloque de acudientes
+    const sel = document.getElementById('msg-acu-curso');
+    if (sel) {
+        sel.innerHTML = '<option value="todos">Todos mis cursos</option>' +
+            misCursos.map(c => `<option value="${c.idMateria}">${escaparHtml(c.nombre)} — Grado ${c.grado}</option>`).join('');
+    }
+}
+
+// Acudientes del curso elegido en el modal ("todos" = los de todos sus cursos)
+function acudientesDelCurso() {
+    const curso = document.getElementById('msg-acu-curso').value;
+    if (curso === 'todos') return misAcudientes;
+    const alumnos = alumnosPorCurso[curso] || new Set();
+    return misAcudientes.filter(a => alumnos.has(a.idAlumno));
+}
+
+// Alterna entre destinatarios "Estudiantes" y "Acudientes"
+function cambiarGrupoDestino() {
+    const aAcudientes = document.getElementById('msg-grupo-acu').checked;
+    document.getElementById('bloque-estudiantes').style.display = aAcudientes ? 'none' : '';
+    document.getElementById('bloque-acudientes').style.display  = aAcudientes ? '' : 'none';
+    if (aAcudientes) renderListaAcudientes();
+}
+
+// Alterna entre "todos los acudientes del curso" y "elegir de la lista"
+function cambiarModoAcudientes() {
+    const elegir = document.getElementById('msg-acu-elegir').checked;
+    document.getElementById('acu-lista-wrap').style.display = elegir ? '' : 'none';
+    actualizarResumenAcudientes();
+}
+
+// Dibuja la lista de acudientes (casillas) del curso seleccionado
+function renderListaAcudientes() {
+    const lista = acudientesDelCurso();
+    const cont  = document.getElementById('lista-acudientes');
+    document.getElementById('acu-sel-todos').checked = false;
+
+    cont.innerHTML = lista.length === 0
+        ? '<span class="text-muted">No hay acudientes registrados para este curso.</span>'
+        : lista.map(a => `
+            <div class="form-check">
+                <input class="form-check-input chk-acudiente" type="checkbox" value="${a.idPadre}" id="acu-${a.idPadre}" onchange="actualizarResumenAcudientes()">
+                <label class="form-check-label" for="acu-${a.idPadre}">
+                    ${escaparHtml(a.nombre)}
+                    <small class="text-muted">— acudiente de ${escaparHtml(a.nombreAlumno)} ${escaparHtml(a.apellidoAlumno)}</small>
+                </label>
+            </div>`).join('');
+
+    cambiarModoAcudientes();
+}
+
+// Marca o desmarca todas las casillas de la lista
+function seleccionarTodosAcudientes(marcar) {
+    document.querySelectorAll('.chk-acudiente').forEach(c => { c.checked = marcar; });
+    actualizarResumenAcudientes();
+}
+
+// Ids de los acudientes que recibirán el mensaje, según el modo elegido
+function acudientesSeleccionados() {
+    if (document.getElementById('msg-acu-todos').checked) {
+        return acudientesDelCurso().map(a => a.idPadre);
+    }
+    return [...document.querySelectorAll('.chk-acudiente:checked')].map(c => parseInt(c.value));
+}
+
+// Texto informativo: a cuántos acudientes llegará el mensaje
+function actualizarResumenAcudientes() {
+    const n = acudientesSeleccionados().length;
+    const total = acudientesDelCurso().length;
+    const modoTodos = document.getElementById('msg-acu-todos').checked;
+    document.getElementById('resumen-acudientes').textContent = modoTodos
+        ? `El mensaje se enviará a ${total} acudiente(s).`
+        : `${n} acudiente(s) seleccionado(s) de ${total}.`;
+}
+
+// Envía un mensaje nuevo a estudiantes o a acudientes de los cursos del docente
 async function enviarMensajeDocente() {
-    const destino  = document.getElementById('msg-destinatario').value;
     const asunto   = document.getElementById('msg-asunto').value.trim();
     const contenido = document.getElementById('msg-contenido').value.trim();
 
@@ -303,11 +397,22 @@ async function enviarMensajeDocente() {
 
     // Construir la lista de receptores
     let receptores;
-    if (destino === 'todos') {
-        if (misEstudiantes.length === 0) { mostrarToast('No tiene estudiantes a quien enviar.'); return; }
-        receptores = misEstudiantes.map(a => ({ idReceptor: a.idAlumno, receptorTipo: 'Alumno' }));
+    if (document.getElementById('msg-grupo-acu').checked) {
+        const ids = acudientesSeleccionados();
+        if (ids.length === 0) {
+            mostrarToast(document.getElementById('msg-acu-todos').checked
+                ? 'No hay acudientes a quien enviar.' : 'Seleccione al menos un acudiente.');
+            return;
+        }
+        receptores = ids.map(id => ({ idReceptor: id, receptorTipo: 'PadreAcudiente' }));
     } else {
-        receptores = [{ idReceptor: parseInt(destino), receptorTipo: 'Alumno' }];
+        const destino = document.getElementById('msg-destinatario').value;
+        if (destino === 'todos') {
+            if (misEstudiantes.length === 0) { mostrarToast('No tiene estudiantes a quien enviar.'); return; }
+            receptores = misEstudiantes.map(a => ({ idReceptor: a.idAlumno, receptorTipo: 'Alumno' }));
+        } else {
+            receptores = [{ idReceptor: parseInt(destino), receptorTipo: 'Alumno' }];
+        }
     }
 
     try {
@@ -320,6 +425,9 @@ async function enviarMensajeDocente() {
         // Limpiar y cerrar el modal
         document.getElementById('msg-asunto').value = '';
         document.getElementById('msg-contenido').value = '';
+        document.querySelectorAll('.chk-acudiente').forEach(c => { c.checked = false; });
+        document.getElementById('acu-sel-todos').checked = false;
+        actualizarResumenAcudientes();
         bootstrap.Modal.getInstance(document.getElementById('modalMensaje'))?.hide();
     } catch (err) {
         mostrarToast('Error: ' + err.message);

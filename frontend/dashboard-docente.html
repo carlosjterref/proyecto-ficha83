@@ -307,11 +307,55 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
+                    <label class="form-label fw-bold" style="font-size:0.85rem;">Enviar a</label>
+                    <div class="d-flex gap-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="msg-grupo" id="msg-grupo-est" value="estudiantes" checked onchange="cambiarGrupoDestino()">
+                            <label class="form-check-label" for="msg-grupo-est">Estudiantes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="msg-grupo" id="msg-grupo-acu" value="acudientes" onchange="cambiarGrupoDestino()">
+                            <label class="form-check-label" for="msg-grupo-acu">Acudientes</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destinatario: estudiantes -->
+                <div class="mb-3" id="bloque-estudiantes">
                     <label class="form-label fw-bold" style="font-size:0.85rem;">Destinatario</label>
                     <select class="form-select" id="msg-destinatario">
                         <option value="todos">Todos mis estudiantes</option>
                     </select>
                 </div>
+
+                <!-- Destinatario: acudientes -->
+                <div id="bloque-acudientes" style="display:none;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold" style="font-size:0.85rem;">Curso</label>
+                        <select class="form-select" id="msg-acu-curso" onchange="renderListaAcudientes()">
+                            <option value="todos">Todos mis cursos</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="msg-acu-modo" id="msg-acu-todos" value="todos" checked onchange="cambiarModoAcudientes()">
+                            <label class="form-check-label" for="msg-acu-todos">Mandar a todos los acudientes del curso</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="msg-acu-modo" id="msg-acu-elegir" value="elegir" onchange="cambiarModoAcudientes()">
+                            <label class="form-check-label" for="msg-acu-elegir">Elegir acudientes de la lista</label>
+                        </div>
+                    </div>
+                    <div class="mb-2" id="acu-lista-wrap" style="display:none;">
+                        <div class="form-check border-bottom pb-1 mb-1">
+                            <input class="form-check-input" type="checkbox" id="acu-sel-todos" onchange="seleccionarTodosAcudientes(this.checked)">
+                            <label class="form-check-label fw-bold" for="acu-sel-todos">Seleccionar todos</label>
+                        </div>
+                        <div class="lista-acudientes" id="lista-acudientes"></div>
+                    </div>
+                    <small class="text-muted d-block mb-3" id="resumen-acudientes"></small>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold" style="font-size:0.85rem;">Asunto</label>
                     <input type="text" class="form-control" id="msg-asunto" placeholder="Asunto del mensaje">

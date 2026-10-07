@@ -8,7 +8,7 @@ const { verificarToken, soloRol } = require('../middleware/auth');
 router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
   try {
     const [filas] = await db.query(
-      `SELECT p.idPadre, p.nombre, p.documento, p.parentesco, p.usuario,
+      `SELECT p.idPadre, p.nombre, p.documento, p.parentesco, p.usuario, p.idAlumno,
               a.nombre AS nombreAlumno, a.apellido AS apellidoAlumno
        FROM padreacudiente p
        INNER JOIN alumno a ON p.idAlumno = a.idAlumno`

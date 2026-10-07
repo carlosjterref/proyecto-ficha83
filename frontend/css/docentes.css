@@ -83,6 +83,16 @@ body { font-family: 'Lato', sans-serif; }
     box-shadow: 0 0 0 2px rgba(0,100,0,0.1);
 }
 
+/* Lista de acudientes del modal "Nuevo mensaje" */
+.lista-acudientes {
+    max-height: 190px;
+    overflow-y: auto;
+    border: 1.5px solid var(--borde);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.88rem;
+}
+
 .btn-guardar-notas {
     background: var(--verde);
     color: white;
