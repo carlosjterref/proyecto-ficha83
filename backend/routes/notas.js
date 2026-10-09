@@ -2,10 +2,18 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero, puedeVerNotasDeAlumno } = require('../middleware/permisos');
 
-// GET /api/notas/alumno/:idAlumno  — notas de un alumno (alumno o docente)
+// GET /api/notas/alumno/:idAlumno  — notas de un alumno
+// Lo puede ver el propio alumno, su acudiente o un docente.
 router.get('/alumno/:idAlumno', verificarToken, async (req, res) => {
   try {
+    const idAlumno = aEntero(req.params.idAlumno);
+    if (!idAlumno) return res.status(400).json({ mensaje: 'Identificador de alumno no válido.' });
+    if (!(await puedeVerNotasDeAlumno(req.usuario, idAlumno))) {
+      return res.status(403).json({ mensaje: 'No tienes permiso para esta acción.' });
+    }
+
     const [filas] = await db.query(
       `SELECT n.idNota, n.calificacion, n.periodo,
               m.nombre AS materia, m.grado,
@@ -15,7 +23,7 @@ router.get('/alumno/:idAlumno', verificarToken, async (req, res) => {
        INNER JOIN docente d ON n.idDocente = d.idDocente
        WHERE n.idAlumno = ?
        ORDER BY n.periodo, m.nombre`,
-      [req.params.idAlumno]
+      [idAlumno]
     );
     res.json(filas);
   } catch (err) {

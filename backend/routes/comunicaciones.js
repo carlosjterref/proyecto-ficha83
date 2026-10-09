@@ -2,6 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken } = require('../middleware/auth');
+const { TIPO_POR_ROL, aEntero, validarMensaje, esDestinatario } = require('../middleware/permisos');
 
 // GET /api/comunicaciones/recibidos  — mensajes recibidos por el usuario autenticado
 router.get('/recibidos', verificarToken, async (req, res) => {
@@ -48,22 +49,18 @@ router.get('/enviados', verificarToken, async (req, res) => {
 
 // POST /api/comunicaciones  — enviar mensaje
 // Body: { contenido, tipo, receptores: [{ idReceptor, receptorTipo }] }
+// Alumnos y acudientes solo escriben a docentes; los docentes, a los alumnos de sus
+// cursos y a los acudientes de esos alumnos (ver middleware/permisos.js).
 router.post('/', verificarToken, async (req, res) => {
-  const { contenido, tipo, receptores } = req.body;
+  const { contenido, tipo } = req.body;
   const { id, rol } = req.usuario;
-
-  if (!contenido || !receptores || receptores.length === 0) {
-    return res.status(400).json({ mensaje: 'Faltan campos obligatorios.' });
-  }
-
-  const tipoMap = { docente: 'Docente', alumno: 'Alumno', acudiente: 'PadreAcudiente' };
-  const emisorTipo = tipoMap[rol];
-
-  const conn = await (await import('../config/db.js')).default.getConnection
-    ? null
-    : null;
+  const emisorTipo = TIPO_POR_ROL[rol];
 
   try {
+    const validacion = await validarMensaje(req.usuario, req.body);
+    if (!validacion.ok) return res.status(validacion.status).json({ mensaje: validacion.mensaje });
+    const receptores = validacion.receptores;
+
     const [resultado] = await db.query(
       'INSERT INTO comunicacion (contenido, tipo, idEmisor, emisorTipo) VALUES (?, ?, ?, ?)',
       [contenido, tipo || null, id, emisorTipo]
@@ -87,7 +84,13 @@ router.post('/', verificarToken, async (req, res) => {
 // PATCH /api/comunicaciones/:id/leer  — marcar mensaje como leído
 router.patch('/:id/leer', verificarToken, async (req, res) => {
   try {
-    await db.query('UPDATE comunicacion SET leida = 1 WHERE idMensaje = ?', [req.params.id]);
+    const idMensaje = aEntero(req.params.id);
+    if (!idMensaje) return res.status(400).json({ mensaje: 'Identificador de mensaje no válido.' });
+    // Solo quien recibió el mensaje puede marcarlo como leído
+    if (!(await esDestinatario(req.usuario, idMensaje))) {
+      return res.status(403).json({ mensaje: 'No tienes permiso para esta acción.' });
+    }
+    await db.query('UPDATE comunicacion SET leida = 1 WHERE idMensaje = ?', [idMensaje]);
     res.json({ mensaje: 'Mensaje marcado como leído.' });
   } catch (err) {
     res.status(500).json({ mensaje: 'Error al marcar el mensaje.' });

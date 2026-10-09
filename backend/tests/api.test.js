@@ -4,9 +4,16 @@
    Ejecutar con:  npm test
    ============================================= */
 
+// Clave solo para las pruebas si el entorno no define una (no se usa fuera de Jest)
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'clave-solo-para-pruebas';
+
 const request = require('supertest');
 const bcrypt  = require('bcryptjs');
+const jwt     = require('jsonwebtoken');
 const app     = require('../server');
+
+// Token firmado con la clave del entorno para un usuario de prueba
+const tokenDe = (rol, id = 1) => 'Bearer ' + jwt.sign({ id, usuario: 'prueba', rol }, process.env.JWT_SECRET);
 
 /* ---------------------------------------------------------------
    CASO 1 — Seguridad: cifrado y verificación de contraseñas (bcrypt)
@@ -62,5 +69,86 @@ describe('Caso 3 - Control de acceso y validación de la API', () => {
   test('crear una noticia sin token devuelve 401 (recurso protegido)', async () => {
     const res = await request(app).post('/api/noticias').send({ titulo: 'x', contenido: 'y' });
     expect(res.status).toBe(401);
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 4 — Cabeceras de seguridad HTTP (helmet)
+--------------------------------------------------------------- */
+describe('Caso 4 - Cabeceras de seguridad', () => {
+
+  test('las respuestas incluyen cabeceras de protección y ocultan el framework', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.headers['x-content-type-options']).toBe('nosniff');
+    expect(res.headers['x-frame-options']).toBeDefined();
+    expect(res.headers['x-powered-by']).toBeUndefined();
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 5 — Límite de intentos fallidos de inicio de sesión
+--------------------------------------------------------------- */
+describe('Caso 5 - Límite de intentos de inicio de sesión', () => {
+  const intento = (usuario) => request(app).post('/api/auth/login').send({ usuario, contrasena: '', rol: 'docente' });
+
+  test('tras 8 intentos fallidos de una misma cuenta, el siguiente se bloquea (429)', async () => {
+    for (let i = 0; i < 8; i++) expect((await intento('cuenta-limite')).status).toBe(400);
+    const bloqueado = await intento('cuenta-limite');
+    expect(bloqueado.status).toBe(429);
+    expect(bloqueado.body.mensaje).toMatch(/demasiados intentos/i);
+  });
+
+  test('el bloqueo de una cuenta no afecta a otra cuenta de la misma conexión', async () => {
+    expect((await intento('otra-cuenta')).status).toBe(400);
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 6 — Control de acceso a notas y mensajes (no requiere base de datos)
+--------------------------------------------------------------- */
+describe('Caso 6 - Control de acceso a notas y mensajería', () => {
+
+  test('un alumno no puede consultar las notas de otro alumno (403)', async () => {
+    const res = await request(app).get('/api/notas/alumno/2').set('Authorization', tokenDe('alumno', 1));
+    expect(res.status).toBe(403);
+  });
+
+  test('el administrador no puede consultar notas de alumnos (403)', async () => {
+    const res = await request(app).get('/api/notas/alumno/1').set('Authorization', tokenDe('admin', 1));
+    expect(res.status).toBe(403);
+  });
+
+  test('un identificador de alumno no numérico devuelve 400', async () => {
+    const res = await request(app).get('/api/notas/alumno/abc').set('Authorization', tokenDe('alumno', 1));
+    expect(res.status).toBe(400);
+  });
+
+  test('un alumno no puede enviar mensajes a otro alumno (403)', async () => {
+    const res = await request(app).post('/api/comunicaciones').set('Authorization', tokenDe('alumno', 1))
+      .send({ contenido: 'hola', receptores: [{ idReceptor: 2, receptorTipo: 'Alumno' }] });
+    expect(res.status).toBe(403);
+  });
+
+  test('un acudiente no puede enviar mensajes a un acudiente (403)', async () => {
+    const res = await request(app).post('/api/comunicaciones').set('Authorization', tokenDe('acudiente', 1))
+      .send({ contenido: 'hola', receptores: [{ idReceptor: 3, receptorTipo: 'PadreAcudiente' }] });
+    expect(res.status).toBe(403);
+  });
+
+  test('el administrador no tiene mensajería (403)', async () => {
+    const res = await request(app).post('/api/comunicaciones').set('Authorization', tokenDe('admin', 1))
+      .send({ contenido: 'hola', receptores: [{ idReceptor: 1, receptorTipo: 'Docente' }] });
+    expect(res.status).toBe(403);
+  });
+
+  test('un mensaje con destinatarios mal formados devuelve 400', async () => {
+    const res = await request(app).post('/api/comunicaciones').set('Authorization', tokenDe('alumno', 1))
+      .send({ contenido: 'hola', receptores: [{ idReceptor: 'x', receptorTipo: 'Docente' }] });
+    expect(res.status).toBe(400);
+  });
+
+  test('un identificador de mensaje no numérico devuelve 400 al marcar como leído', async () => {
+    const res = await request(app).patch('/api/comunicaciones/abc/leer').set('Authorization', tokenDe('alumno', 1));
+    expect(res.status).toBe(400);
   });
 });

@@ -1,13 +1,27 @@
 const express = require('express');
 const cors    = require('cors');
+const helmet  = require('helmet');
 const path    = require('path');
 require('dotenv').config();
+const { limiteLogin } = require('./middleware/limites');
 
 const app = express();
 
+// Detrás del balanceador de Render hay un proxy: se confía en él para leer la IP real
+// del cliente (necesario para el límite de intentos de inicio de sesión).
+app.set('trust proxy', 1);
+
 // Middlewares globales
+app.use(helmet({
+  // La política de contenido (CSP) se deja desactivada: el sitio usa Bootstrap, fuentes,
+  // calendario, mapa y videos de otros dominios, además de scripts dentro de las páginas.
+  contentSecurityPolicy: false,
+}));
 app.use(cors());
 app.use(express.json());
+
+// Límite de intentos fallidos de inicio de sesión
+app.use('/api/auth/login', limiteLogin);
 
 // Servir el frontend estático (HTML, CSS, JS, imágenes)
 // Así todo corre bajo http://localhost:3000 y se evitan problemas de CORS / file://
