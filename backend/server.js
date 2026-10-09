@@ -3,7 +3,7 @@ const cors    = require('cors');
 const helmet  = require('helmet');
 const path    = require('path');
 require('dotenv').config();
-const { limiteLogin } = require('./middleware/limites');
+const { limiteLogin, limiteRegistro } = require('./middleware/limites');
 
 const app = express();
 
@@ -22,6 +22,9 @@ app.use(express.json());
 
 // Límite de intentos fallidos de inicio de sesión
 app.use('/api/auth/login', limiteLogin);
+
+// Límite de registros públicos por conexión
+app.use('/api/inscripciones', limiteRegistro);
 
 // Servir el frontend estático (HTML, CSS, JS, imágenes)
 // Así todo corre bajo http://localhost:3000 y se evitan problemas de CORS / file://

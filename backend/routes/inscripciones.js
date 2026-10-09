@@ -2,19 +2,41 @@ const express = require('express');
 const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
+const { texto, correo, enteroEnRango } = require('../middleware/validaciones');
+
+// Longitud mínima de contraseña (la misma que exige el cambio de contraseña) y máxima
+// (bcrypt solo usa los primeros 72 caracteres).
+const CLAVE_MIN = 4, CLAVE_MAX = 72;
+const claveValida = c => typeof c === 'string' && c.length >= CLAVE_MIN && c.length <= CLAVE_MAX;
 
 // POST /api/inscripciones  — PÚBLICO: registra un estudiante y su acudiente
 // Body: { estudiante: {...}, acudiente: {...} }
 router.post('/', async (req, res) => {
-  const est = req.body.estudiante || {};
-  const acu = req.body.acudiente  || {};
+  const e = (req.body && req.body.estudiante) || {};
+  const a = (req.body && req.body.acudiente)  || {};
 
-  // Validación de campos obligatorios
-  if (!est.nombre || !est.apellido || !est.documento || !est.grado || !est.usuario || !est.contrasena) {
-    return res.status(400).json({ mensaje: 'Faltan datos obligatorios del estudiante.' });
+  // Validación de campos obligatorios, tipos y longitudes (las de las columnas de la base de datos)
+  const est = {
+    nombre: texto(e.nombre, 100), apellido: texto(e.apellido, 100), documento: texto(e.documento, 20),
+    grado: enteroEnRango(e.grado, 0, 999), correo: correo(e.correo),
+    usuario: texto(e.usuario, 80, 3), contrasena: e.contrasena,
+  };
+  const acu = {
+    nombre: texto(a.nombre, 100), documento: texto(a.documento, 20), parentesco: texto(a.parentesco, 50),
+    correo: correo(a.correo), usuario: texto(a.usuario, 80, 3), contrasena: a.contrasena,
+  };
+
+  if (!est.nombre || !est.apellido || !est.documento || est.grado === null || !est.usuario || !est.contrasena) {
+    return res.status(400).json({ mensaje: 'Faltan datos obligatorios del estudiante, o alguno no es válido.' });
   }
   if (!acu.nombre || !acu.documento || !acu.parentesco || !acu.usuario || !acu.contrasena) {
-    return res.status(400).json({ mensaje: 'Faltan datos obligatorios del acudiente.' });
+    return res.status(400).json({ mensaje: 'Faltan datos obligatorios del acudiente, o alguno no es válido.' });
+  }
+  if (est.correo === null || acu.correo === null) {
+    return res.status(400).json({ mensaje: 'El correo electrónico no es válido.' });
+  }
+  if (!claveValida(est.contrasena) || !claveValida(acu.contrasena)) {
+    return res.status(400).json({ mensaje: `La contraseña debe tener entre ${CLAVE_MIN} y ${CLAVE_MAX} caracteres.` });
   }
 
   const conn = await db.getConnection();

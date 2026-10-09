@@ -4,8 +4,8 @@ const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
 
-// GET /api/docentes
-router.get('/', verificarToken, async (req, res) => {
+// GET /api/docentes  — solo docentes (incluye correo y usuario; el directorio público es /plantel)
+router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
   try {
     const [filas] = await db.query(
       'SELECT idDocente, nombre, especialidad, correo, usuario FROM docente'
@@ -31,8 +31,8 @@ router.get('/plantel', async (req, res) => {
   }
 });
 
-// GET /api/docentes/:id
-router.get('/:id', verificarToken, async (req, res) => {
+// GET /api/docentes/:id  — solo docentes
+router.get('/:id', verificarToken, soloRol('docente'), async (req, res) => {
   try {
     const [filas] = await db.query(
       'SELECT idDocente, nombre, especialidad, correo, usuario FROM docente WHERE idDocente = ?',

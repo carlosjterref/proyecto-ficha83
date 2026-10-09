@@ -3,6 +3,7 @@ const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero, puedeVerAlumno } = require('../middleware/permisos');
 
 // GET /api/alumnos  — solo docentes
 router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
@@ -16,12 +17,17 @@ router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
   }
 });
 
-// GET /api/alumnos/:id
+// GET /api/alumnos/:id  — el propio alumno, su acudiente o un docente
 router.get('/:id', verificarToken, async (req, res) => {
   try {
+    const idAlumno = aEntero(req.params.id);
+    if (!idAlumno) return res.status(400).json({ mensaje: 'Identificador de alumno no válido.' });
+    if (!(await puedeVerAlumno(req.usuario, idAlumno))) {
+      return res.status(403).json({ mensaje: 'No tienes permiso para esta acción.' });
+    }
     const [filas] = await db.query(
       'SELECT idAlumno, nombre, apellido, grado, correo, usuario FROM alumno WHERE idAlumno = ?',
-      [req.params.id]
+      [idAlumno]
     );
     if (filas.length === 0) return res.status(404).json({ mensaje: 'Alumno no encontrado.' });
     res.json(filas[0]);

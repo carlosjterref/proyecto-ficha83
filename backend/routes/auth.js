@@ -25,6 +25,10 @@ router.post('/login', async (req, res) => {
   if (!usuario || !contrasena || !rol) {
     return res.status(400).json({ mensaje: 'Usuario, contraseña y rol son obligatorios.' });
   }
+  // Los tres datos deben ser texto (un objeto o una lista se expandirían dentro de la consulta SQL)
+  if (typeof usuario !== 'string' || typeof contrasena !== 'string' || typeof rol !== 'string') {
+    return res.status(400).json({ mensaje: 'Los datos de inicio de sesión no son válidos.' });
+  }
 
   try {
     let tabla, idCampo;
@@ -56,10 +60,14 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ mensaje: 'Credenciales incorrectas.' });
     }
 
-    const user = filas[0];
-    const passwordValida = await bcrypt.compare(contrasena, user.contrasena);
+    // Si el dato coincide con varias cuentas (p. ej. el usuario de una es el documento de otra),
+    // se prueba la contraseña contra cada una: nadie queda bloqueado por la cuenta de otra persona.
+    let user = null;
+    for (const fila of filas.slice(0, 5)) {
+      if (await bcrypt.compare(contrasena, fila.contrasena)) { user = fila; break; }
+    }
 
-    if (!passwordValida) {
+    if (!user) {
       return res.status(401).json({ mensaje: 'Credenciales incorrectas.' });
     }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero, relacionConMateria, rechazarSiNoEsPropia } = require('../middleware/permisos');
 
 // GET /api/materias  — todas las materias con nombre del docente
 router.get('/', verificarToken, async (req, res) => {
@@ -53,9 +54,14 @@ router.get('/grado/:grado', verificarToken, async (req, res) => {
 });
 
 // GET /api/materias/:id/alumnos  — alumnos inscritos en una materia (con su nota si existe)
-router.get('/:id/alumnos', verificarToken, async (req, res) => {
+// Solo el docente que dicta la materia (incluye documentos y calificaciones).
+router.get('/:id/alumnos', verificarToken, soloRol('docente'), async (req, res) => {
   const { periodo } = req.query; // opcional: filtra la nota por periodo
   try {
+    const idMateria = aEntero(req.params.id);
+    if (!idMateria) return res.status(400).json({ mensaje: 'Identificador de materia no válido.' });
+    if (rechazarSiNoEsPropia(res, await relacionConMateria(req.usuario.id, idMateria), 'Materia')) return;
+
     const [filas] = await db.query(
       `SELECT a.idAlumno, a.nombre, a.apellido, a.documento, a.grado,
               n.idNota, n.calificacion, n.periodo
@@ -67,7 +73,7 @@ router.get('/:id/alumnos', verificarToken, async (req, res) => {
         AND (? IS NULL OR n.periodo = ?)
        WHERE ma.idMateria = ?
        ORDER BY a.apellido, a.nombre`,
-      [periodo || null, periodo || null, req.params.id]
+      [periodo || null, periodo || null, idMateria]
     );
     res.json(filas);
   } catch (err) {

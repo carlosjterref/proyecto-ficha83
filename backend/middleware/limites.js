@@ -39,4 +39,15 @@ const limiteLoginPorIp = rateLimit({
   keyGenerator: (req) => ipKeyGenerator(req.ip),
 });
 
-module.exports = { limiteLogin: [limiteLoginPorCuenta, limiteLoginPorIp] };
+// Registro público de estudiantes: evita crear cuentas en masa desde una misma conexión.
+// El tope es amplio para que una jornada de inscripciones en el colegio no se bloquee.
+const limiteRegistro = rateLimit({
+  windowMs: 60 * 60 * 1000,       // 1 hora
+  limit: 60,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  keyGenerator: (req) => ipKeyGenerator(req.ip),
+  message: { mensaje: 'Se han enviado demasiados registros desde esta conexión. Intente de nuevo más tarde.' },
+});
+
+module.exports = { limiteLogin: [limiteLoginPorCuenta, limiteLoginPorIp], limiteRegistro };

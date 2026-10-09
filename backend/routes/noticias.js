@@ -2,6 +2,29 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero } = require('../middleware/permisos');
+const { texto, urlHttp } = require('../middleware/validaciones');
+
+const TIPOS_MEDIA = ['imagen', 'video', 'ninguno'];
+
+// Valida y normaliza el cuerpo de una noticia. Devuelve { datos } o { error }.
+function validarNoticia(cuerpo) {
+  const titulo    = texto(cuerpo.titulo, 200);
+  const contenido = texto(cuerpo.contenido, 20000);
+  const categoria = cuerpo.categoria ? texto(cuerpo.categoria, 50) : 'Noticia';
+  const tipoMedia = cuerpo.tipoMedia || 'ninguno';
+
+  if (!titulo || !contenido) return { error: 'El título y el contenido son obligatorios.' };
+  if (!categoria) return { error: 'La categoría no es válida.' };
+  if (!TIPOS_MEDIA.includes(tipoMedia)) return { error: 'El tipo de multimedia no es válido.' };
+
+  let mediaUrl = null;
+  if (cuerpo.mediaUrl) {
+    mediaUrl = urlHttp(cuerpo.mediaUrl);
+    if (!mediaUrl) return { error: 'El enlace de la multimedia debe ser una dirección http o https válida.' };
+  }
+  return { datos: { titulo, contenido, categoria, tipoMedia, mediaUrl } };
+}
 
 // GET /api/noticias  — PÚBLICO: lista de noticias publicadas (más recientes primero)
 router.get('/', async (req, res) => {
@@ -42,18 +65,14 @@ router.get('/:id', async (req, res) => {
 
 // POST /api/noticias  — solo admin
 router.post('/', verificarToken, soloRol('admin'), async (req, res) => {
-  const { titulo, contenido, categoria, mediaUrl, tipoMedia } = req.body;
-
-  if (!titulo || !contenido) {
-    return res.status(400).json({ mensaje: 'El título y el contenido son obligatorios.' });
-  }
+  const { datos, error } = validarNoticia(req.body);
+  if (error) return res.status(400).json({ mensaje: error });
 
   try {
     const [resultado] = await db.query(
       `INSERT INTO noticia (titulo, contenido, categoria, mediaUrl, tipoMedia, idAdmin)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [titulo, contenido, categoria || 'Noticia', mediaUrl || null,
-       tipoMedia || 'ninguno', req.usuario.id]
+      [datos.titulo, datos.contenido, datos.categoria, datos.mediaUrl, datos.tipoMedia, req.usuario.id]
     );
     res.status(201).json({ mensaje: 'Noticia publicada.', id: resultado.insertId });
   } catch (err) {
@@ -63,12 +82,16 @@ router.post('/', verificarToken, soloRol('admin'), async (req, res) => {
 
 // PUT /api/noticias/:id  — solo admin
 router.put('/:id', verificarToken, soloRol('admin'), async (req, res) => {
-  const { titulo, contenido, categoria, mediaUrl, tipoMedia } = req.body;
+  const idNoticia = aEntero(req.params.id);
+  if (!idNoticia) return res.status(400).json({ mensaje: 'Identificador de noticia no válido.' });
+  const { datos, error } = validarNoticia(req.body);
+  if (error) return res.status(400).json({ mensaje: error });
+
   try {
     const [resultado] = await db.query(
       `UPDATE noticia SET titulo=?, contenido=?, categoria=?, mediaUrl=?, tipoMedia=?
        WHERE idNoticia=?`,
-      [titulo, contenido, categoria, mediaUrl || null, tipoMedia || 'ninguno', req.params.id]
+      [datos.titulo, datos.contenido, datos.categoria, datos.mediaUrl, datos.tipoMedia, idNoticia]
     );
     if (resultado.affectedRows === 0) return res.status(404).json({ mensaje: 'Noticia no encontrada.' });
     res.json({ mensaje: 'Noticia actualizada.' });

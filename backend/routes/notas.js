@@ -2,7 +2,8 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
-const { aEntero, puedeVerNotasDeAlumno } = require('../middleware/permisos');
+const { aEntero, puedeVerNotasDeAlumno, relacionConMateria, relacionConNota, alumnoEnMateria, rechazarSiNoEsPropia } = require('../middleware/permisos');
+const { texto, numero } = require('../middleware/validaciones');
 
 // GET /api/notas/alumno/:idAlumno  — notas de un alumno
 // Lo puede ver el propio alumno, su acudiente o un docente.
@@ -31,9 +32,13 @@ router.get('/alumno/:idAlumno', verificarToken, async (req, res) => {
   }
 });
 
-// GET /api/notas/materia/:idMateria  — notas de una materia (solo docentes)
+// GET /api/notas/materia/:idMateria  — notas de una materia (solo el docente que la dicta)
 router.get('/materia/:idMateria', verificarToken, soloRol('docente'), async (req, res) => {
   try {
+    const idMateria = aEntero(req.params.idMateria);
+    if (!idMateria) return res.status(400).json({ mensaje: 'Identificador de materia no válido.' });
+    if (rechazarSiNoEsPropia(res, await relacionConMateria(req.usuario.id, idMateria), 'Materia')) return;
+
     const [filas] = await db.query(
       `SELECT n.idNota, n.calificacion, n.periodo,
               a.nombre AS alumno, a.apellido, a.grado
@@ -41,7 +46,7 @@ router.get('/materia/:idMateria', verificarToken, soloRol('docente'), async (req
        INNER JOIN alumno a ON n.idAlumno = a.idAlumno
        WHERE n.idMateria = ?
        ORDER BY n.periodo, a.apellido`,
-      [req.params.idMateria]
+      [idMateria]
     );
     res.json(filas);
   } catch (err) {
@@ -49,11 +54,15 @@ router.get('/materia/:idMateria', verificarToken, soloRol('docente'), async (req
   }
 });
 
-// POST /api/notas  — solo docentes
+// POST /api/notas  — solo el docente que dicta la materia, para un alumno inscrito en ella.
+// El docente que queda registrado es el de la sesión (no el que envíe el navegador).
 router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
-  const { calificacion, periodo, idAlumno, idMateria, idDocente } = req.body;
+  const calificacion = numero(req.body.calificacion);
+  const periodo      = texto(req.body.periodo, 20);
+  const idAlumno     = aEntero(req.body.idAlumno);
+  const idMateria    = aEntero(req.body.idMateria);
 
-  if (!calificacion || !periodo || !idAlumno || !idMateria || !idDocente) {
+  if (!calificacion || !periodo || !idAlumno || !idMateria) {
     return res.status(400).json({ mensaje: 'Faltan campos obligatorios.' });
   }
 
@@ -62,9 +71,14 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
   }
 
   try {
+    if (rechazarSiNoEsPropia(res, await relacionConMateria(req.usuario.id, idMateria), 'Materia')) return;
+    if (!(await alumnoEnMateria(idAlumno, idMateria))) {
+      return res.status(400).json({ mensaje: 'El alumno no está inscrito en esa materia.' });
+    }
+
     const [resultado] = await db.query(
       'INSERT INTO nota (calificacion, periodo, idAlumno, idMateria, idDocente) VALUES (?, ?, ?, ?, ?)',
-      [calificacion, periodo, idAlumno, idMateria, idDocente]
+      [calificacion, periodo, idAlumno, idMateria, req.usuario.id]
     );
     res.status(201).json({ mensaje: 'Nota registrada.', id: resultado.insertId });
   } catch (err) {
@@ -72,18 +86,26 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
   }
 });
 
-// PUT /api/notas/:id  — solo docentes
+// PUT /api/notas/:id  — solo el docente que dicta la materia de la nota
 router.put('/:id', verificarToken, soloRol('docente'), async (req, res) => {
-  const { calificacion, periodo } = req.body;
+  const idNota       = aEntero(req.params.id);
+  const calificacion = numero(req.body.calificacion);
+  const periodo      = texto(req.body.periodo, 20);
 
+  if (!idNota) return res.status(400).json({ mensaje: 'Identificador de nota no válido.' });
+  if (calificacion === null || !periodo) {
+    return res.status(400).json({ mensaje: 'Faltan campos obligatorios.' });
+  }
   if (calificacion < 0 || calificacion > 10) {
     return res.status(400).json({ mensaje: 'La calificación debe estar entre 0 y 10.' });
   }
 
   try {
+    if (rechazarSiNoEsPropia(res, await relacionConNota(req.usuario.id, idNota), 'Nota')) return;
+
     const [resultado] = await db.query(
       'UPDATE nota SET calificacion=?, periodo=? WHERE idNota=?',
-      [calificacion, periodo, req.params.id]
+      [calificacion, periodo, idNota]
     );
     if (resultado.affectedRows === 0) return res.status(404).json({ mensaje: 'Nota no encontrada.' });
     res.json({ mensaje: 'Nota actualizada.' });
@@ -92,10 +114,14 @@ router.put('/:id', verificarToken, soloRol('docente'), async (req, res) => {
   }
 });
 
-// DELETE /api/notas/:id  — solo docentes
+// DELETE /api/notas/:id  — solo el docente que dicta la materia de la nota
 router.delete('/:id', verificarToken, soloRol('docente'), async (req, res) => {
   try {
-    const [resultado] = await db.query('DELETE FROM nota WHERE idNota = ?', [req.params.id]);
+    const idNota = aEntero(req.params.id);
+    if (!idNota) return res.status(400).json({ mensaje: 'Identificador de nota no válido.' });
+    if (rechazarSiNoEsPropia(res, await relacionConNota(req.usuario.id, idNota), 'Nota')) return;
+
+    const [resultado] = await db.query('DELETE FROM nota WHERE idNota = ?', [idNota]);
     if (resultado.affectedRows === 0) return res.status(404).json({ mensaje: 'Nota no encontrada.' });
     res.json({ mensaje: 'Nota eliminada.' });
   } catch (err) {

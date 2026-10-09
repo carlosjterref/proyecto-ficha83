@@ -2,6 +2,24 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero } = require('../middleware/permisos');
+const { texto, urlHttp } = require('../middleware/validaciones');
+
+// Valida y normaliza el cuerpo de una circular. Devuelve { datos } o { error }.
+function validarCircular(cuerpo) {
+  const titulo = texto(cuerpo.titulo, 200);
+  if (!titulo || !cuerpo.archivoUrl) return { error: 'El título y el enlace del documento son obligatorios.' };
+
+  const archivoUrl = urlHttp(cuerpo.archivoUrl);
+  if (!archivoUrl) return { error: 'El enlace del documento debe ser una dirección http o https válida.' };
+
+  let descripcion = null;
+  if (cuerpo.descripcion) {
+    descripcion = texto(cuerpo.descripcion, 5000);
+    if (!descripcion) return { error: 'La descripción es demasiado larga.' };
+  }
+  return { datos: { titulo, descripcion, archivoUrl } };
+}
 
 // GET /api/circulares  — PÚBLICO: lista de circulares (más recientes primero)
 router.get('/', async (req, res) => {
@@ -21,16 +39,13 @@ router.get('/', async (req, res) => {
 
 // POST /api/circulares  — solo admin
 router.post('/', verificarToken, soloRol('admin'), async (req, res) => {
-  const { titulo, descripcion, archivoUrl } = req.body;
-
-  if (!titulo || !archivoUrl) {
-    return res.status(400).json({ mensaje: 'El título y el enlace del documento son obligatorios.' });
-  }
+  const { datos, error } = validarCircular(req.body);
+  if (error) return res.status(400).json({ mensaje: error });
 
   try {
     const [resultado] = await db.query(
       'INSERT INTO circular (titulo, descripcion, archivoUrl, idAdmin) VALUES (?, ?, ?, ?)',
-      [titulo, descripcion || null, archivoUrl, req.usuario.id]
+      [datos.titulo, datos.descripcion, datos.archivoUrl, req.usuario.id]
     );
     res.status(201).json({ mensaje: 'Circular publicada.', id: resultado.insertId });
   } catch (err) {
@@ -40,11 +55,15 @@ router.post('/', verificarToken, soloRol('admin'), async (req, res) => {
 
 // PUT /api/circulares/:id  — solo admin
 router.put('/:id', verificarToken, soloRol('admin'), async (req, res) => {
-  const { titulo, descripcion, archivoUrl } = req.body;
+  const idCircular = aEntero(req.params.id);
+  if (!idCircular) return res.status(400).json({ mensaje: 'Identificador de circular no válido.' });
+  const { datos, error } = validarCircular(req.body);
+  if (error) return res.status(400).json({ mensaje: error });
+
   try {
     const [resultado] = await db.query(
       'UPDATE circular SET titulo=?, descripcion=?, archivoUrl=? WHERE idCircular=?',
-      [titulo, descripcion || null, archivoUrl, req.params.id]
+      [datos.titulo, datos.descripcion, datos.archivoUrl, idCircular]
     );
     if (resultado.affectedRows === 0) return res.status(404).json({ mensaje: 'Circular no encontrada.' });
     res.json({ mensaje: 'Circular actualizada.' });

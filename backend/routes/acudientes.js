@@ -3,6 +3,7 @@ const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
+const { aEntero, puedeVerAcudiente } = require('../middleware/permisos');
 
 // GET /api/acudientes  — solo docentes
 router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
@@ -19,16 +20,21 @@ router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
   }
 });
 
-// GET /api/acudientes/:id
+// GET /api/acudientes/:id  — el propio acudiente o un docente
 router.get('/:id', verificarToken, async (req, res) => {
   try {
+    const idPadre = aEntero(req.params.id);
+    if (!idPadre) return res.status(400).json({ mensaje: 'Identificador de acudiente no válido.' });
+    if (!puedeVerAcudiente(req.usuario, idPadre)) {
+      return res.status(403).json({ mensaje: 'No tienes permiso para esta acción.' });
+    }
     const [filas] = await db.query(
       `SELECT p.idPadre, p.nombre, p.documento, p.parentesco, p.usuario, p.idAlumno,
               a.nombre AS nombreAlumno, a.apellido AS apellidoAlumno
        FROM padreacudiente p
        INNER JOIN alumno a ON p.idAlumno = a.idAlumno
        WHERE p.idPadre = ?`,
-      [req.params.id]
+      [idPadre]
     );
     if (filas.length === 0) return res.status(404).json({ mensaje: 'Acudiente no encontrado.' });
     res.json(filas[0]);

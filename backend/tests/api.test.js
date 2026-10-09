@@ -152,3 +152,135 @@ describe('Caso 6 - Control de acceso a notas y mensajería', () => {
     expect(res.status).toBe(400);
   });
 });
+
+/* ---------------------------------------------------------------
+   CASO 7 — Datos personales por identificador (no requiere base de datos)
+--------------------------------------------------------------- */
+describe('Caso 7 - Acceso a datos de alumnos, acudientes, docentes y cursos', () => {
+  const get = (ruta, rol, id = 1) => request(app).get(ruta).set('Authorization', tokenDe(rol, id));
+
+  test('un alumno no puede ver los datos de otro alumno (403)', async () => {
+    expect((await get('/api/alumnos/2', 'alumno', 1)).status).toBe(403);
+  });
+
+  test('un identificador de alumno no numérico devuelve 400', async () => {
+    expect((await get('/api/alumnos/abc', 'alumno', 1)).status).toBe(400);
+  });
+
+  test('un alumno no puede ver los datos de un acudiente (403)', async () => {
+    expect((await get('/api/acudientes/5', 'alumno', 1)).status).toBe(403);
+  });
+
+  test('un acudiente no puede ver los datos de otro acudiente (403)', async () => {
+    expect((await get('/api/acudientes/2', 'acudiente', 1)).status).toBe(403);
+  });
+
+  test('alumnos y acudientes no pueden consultar la lista ni el detalle de docentes (403)', async () => {
+    expect((await get('/api/docentes', 'alumno')).status).toBe(403);
+    expect((await get('/api/docentes/1', 'acudiente')).status).toBe(403);
+  });
+
+  test('el directorio público del plantel sigue sin exigir sesión', async () => {
+    const res = await request(app).get('/api/docentes/plantel');
+    expect(res.status).not.toBe(401);
+    expect(res.status).not.toBe(403);
+  });
+
+  test('alumnos y acudientes no pueden ver la lista de un curso con documentos y notas (403)', async () => {
+    expect((await get('/api/materias/1/alumnos', 'alumno')).status).toBe(403);
+    expect((await get('/api/materias/1/alumnos', 'acudiente')).status).toBe(403);
+  });
+
+  test('un identificador de curso no numérico devuelve 400 al docente', async () => {
+    expect((await get('/api/materias/abc/alumnos', 'docente', 7)).status).toBe(400);
+    expect((await get('/api/notas/materia/abc', 'docente', 7)).status).toBe(400);
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 8 — Registro de notas: validación y permisos (no requiere base de datos)
+--------------------------------------------------------------- */
+describe('Caso 8 - Escritura de notas', () => {
+  const docente = () => tokenDe('docente', 7);
+
+  test('una calificación que no es un número devuelve 400', async () => {
+    const res = await request(app).post('/api/notas').set('Authorization', docente())
+      .send({ calificacion: 'abc', periodo: 'Período 1', idAlumno: 1, idMateria: 1 });
+    expect(res.status).toBe(400);
+  });
+
+  test('una nota sin materia devuelve 400', async () => {
+    const res = await request(app).post('/api/notas').set('Authorization', docente())
+      .send({ calificacion: 7, periodo: 'Período 1', idAlumno: 1 });
+    expect(res.status).toBe(400);
+  });
+
+  test('actualizar una nota sin datos devuelve 400 y con identificador no numérico también', async () => {
+    expect((await request(app).put('/api/notas/1').set('Authorization', docente()).send({})).status).toBe(400);
+    expect((await request(app).put('/api/notas/abc').set('Authorization', docente()).send({ calificacion: 7, periodo: 'Período 1' })).status).toBe(400);
+    expect((await request(app).delete('/api/notas/abc').set('Authorization', docente())).status).toBe(400);
+  });
+
+  test('un alumno no puede modificar ni borrar notas (403)', async () => {
+    const alumno = tokenDe('alumno', 1);
+    expect((await request(app).put('/api/notas/1').set('Authorization', alumno).send({ calificacion: 10, periodo: 'Período 1' })).status).toBe(403);
+    expect((await request(app).delete('/api/notas/1').set('Authorization', alumno)).status).toBe(403);
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 9 — Datos que llegan del navegador: login, registro público y enlaces
+--------------------------------------------------------------- */
+describe('Caso 9 - Validación de datos de entrada', () => {
+  const estudiante = { nombre: 'Ana', apellido: 'Prueba', documento: '123', grado: 6, usuario: 'anaprueba', contrasena: 'clave123' };
+  const acudiente  = { nombre: 'Luz Prueba', documento: '456', parentesco: 'Madre', usuario: 'luzprueba', contrasena: 'clave456' };
+  const registrar = (cambios = {}) => request(app).post('/api/inscripciones')
+    .send({ estudiante: { ...estudiante, ...(cambios.estudiante || {}) }, acudiente: { ...acudiente, ...(cambios.acudiente || {}) } });
+
+  test('el login rechaza datos que no son texto (400)', async () => {
+    const res = await request(app).post('/api/auth/login').send({ usuario: { a: 1 }, contrasena: 'x', rol: 'docente' });
+    expect(res.status).toBe(400);
+  });
+
+  test('el registro público rechaza contraseñas demasiado cortas o demasiado largas (400)', async () => {
+    expect((await registrar({ estudiante: { contrasena: '123' } })).status).toBe(400);
+    expect((await registrar({ acudiente: { contrasena: 'a'.repeat(73) } })).status).toBe(400);
+  });
+
+  test('el registro público rechaza grado, correo y textos no válidos (400)', async () => {
+    expect((await registrar({ estudiante: { grado: 'abc' } })).status).toBe(400);
+    expect((await registrar({ estudiante: { correo: 'no-es-un-correo' } })).status).toBe(400);
+    expect((await registrar({ acudiente: { nombre: 'x'.repeat(101) } })).status).toBe(400);
+    expect((await registrar({ estudiante: { usuario: 'ab' } })).status).toBe(400);
+  });
+
+  test('las noticias rechazan enlaces que no sean http o https (400)', async () => {
+    const admin = tokenDe('admin', 1);
+    const base = { titulo: 'T', contenido: 'C', tipoMedia: 'imagen' };
+    expect((await request(app).post('/api/noticias').set('Authorization', admin).send({ ...base, mediaUrl: 'javascript:alert(1)' })).status).toBe(400);
+    expect((await request(app).post('/api/noticias').set('Authorization', admin).send({ ...base, tipoMedia: 'otro' })).status).toBe(400);
+    expect((await request(app).put('/api/noticias/1').set('Authorization', admin).send({ ...base, mediaUrl: 'data:text/html,x' })).status).toBe(400);
+  });
+
+  test('las circulares rechazan enlaces que no sean http o https (400)', async () => {
+    const admin = tokenDe('admin', 1);
+    expect((await request(app).post('/api/circulares').set('Authorization', admin).send({ titulo: 'C', archivoUrl: 'javascript:alert(1)' })).status).toBe(400);
+    expect((await request(app).put('/api/circulares/1').set('Authorization', admin).send({ titulo: 'C', archivoUrl: 'ftp://x/y' })).status).toBe(400);
+  });
+});
+
+/* ---------------------------------------------------------------
+   CASO 10 — Límite de registros públicos por conexión (debe ir al final)
+--------------------------------------------------------------- */
+describe('Caso 10 - Límite de registros públicos', () => {
+
+  test('tras muchos registros desde la misma conexión, el servidor responde 429', async () => {
+    let bloqueado = null;
+    for (let i = 0; i < 70 && !bloqueado; i++) {
+      const res = await request(app).post('/api/inscripciones').send({});
+      if (res.status === 429) bloqueado = res;
+    }
+    expect(bloqueado).not.toBeNull();
+    expect(bloqueado.body.mensaje).toMatch(/demasiados registros/i);
+  });
+});
