@@ -64,7 +64,7 @@ function renderCursos() {
             <div class="curso-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="curso-nombre"><i class="bi bi-journal-text me-2"></i>${c.nombre}</div>
+                        <div class="curso-nombre"><i class="bi bi-journal-text me-2"></i>${escaparHtml(c.nombre)}</div>
                         <div class="curso-info">Grado ${c.grado}</div>
                     </div>
                     <span class="curso-badge">Ver notas</span>
@@ -82,7 +82,7 @@ function llenarSelectCursos() {
         return;
     }
     sel.innerHTML = misCursos
-        .map(c => `<option value="${c.idMateria}">${c.nombre} — Grado ${c.grado}</option>`)
+        .map(c => `<option value="${c.idMateria}">${escaparHtml(c.nombre)} — Grado ${c.grado}</option>`)
         .join('');
 }
 
@@ -119,15 +119,15 @@ async function cargarAlumnos() {
 
             return `<tr data-idalumno="${a.idAlumno}" data-idnota="${a.idNota || ''}">
                 <td>${i + 1}</td>
-                <td><strong>${a.nombre} ${a.apellido}</strong></td>
-                <td style="color:#888">${a.documento || '—'}</td>
+                <td><strong>${escaparHtml(a.nombre)} ${escaparHtml(a.apellido)}</strong></td>
+                <td style="color:#888">${escaparHtml(a.documento) || '—'}</td>
                 <td><span class="${cls}">${notaPrev}</span></td>
                 <td><input type="number" class="nota-input" min="1" max="10" step="0.1" placeholder="—" id="nota-${a.idAlumno}"></td>
                 <td>${estado}</td>
             </tr>`;
         }).join('');
     } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">${escaparHtml(err.message)}</td></tr>`;
     }
 }
 
@@ -220,7 +220,7 @@ function renderPanelMensajes(mensajes) {
             <li class="d-flex gap-2 align-items-start mb-3" style="cursor:pointer;" onclick="abrirMensaje(${m.idMensaje})">
                 <i class="bi ${m.leida ? 'bi-envelope-open text-muted' : 'bi-envelope-fill'} mt-1" style="${m.leida ? '' : 'color:var(--verde)'}"></i>
                 <div>
-                    <strong>${m.emisorTipo}</strong>${m.tipo ? ' — ' + m.tipo : ''}<br>
+                    <strong>${escaparHtml(m.emisorTipo)}</strong>${m.tipo ? ' — ' + escaparHtml(m.tipo) : ''}<br>
                     <small class="text-muted">${formatearFechaMsg(m.fechaHora)}</small>
                 </div>
             </li>`).join('') +
@@ -263,7 +263,7 @@ async function cargarEstudiantes() {
     if (sel) {
         sel.innerHTML = '<option value="todos">Todos mis estudiantes</option>' +
             misEstudiantes.map(a =>
-                `<option value="${a.idAlumno}">${a.nombre} ${a.apellido}</option>`
+                `<option value="${a.idAlumno}">${escaparHtml(a.nombre)} ${escaparHtml(a.apellido)}</option>`
             ).join('');
     }
 
@@ -291,7 +291,7 @@ function renderPanelCursos(resumen) {
     cont.innerHTML = `<ul class="list-unstyled mb-0" style="font-size:0.88rem;">` +
         resumen.map(c => `
             <li class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom:1px solid #f0f0f0">
-                <div><strong>${c.nombre}</strong> — Grado ${c.grado}<br>
+                <div><strong>${escaparHtml(c.nombre)}</strong> — Grado ${c.grado}<br>
                     <small class="text-muted">${c.estudiantes} estudiante(s)</small></div>
                 <span class="badge" style="background:${c.pendientes > 0 ? '#fdecea' : '#e8f5eb'};color:${c.pendientes > 0 ? '#c0392b' : 'var(--verde)'}">
                     ${c.pendientes > 0 ? c.pendientes + ' pendiente(s)' : 'Al día'}

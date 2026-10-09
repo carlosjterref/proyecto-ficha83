@@ -85,7 +85,7 @@ async function cargarNoticias() {
         _noticiasCache = {};
         noticias.forEach(n => _noticiasCache[n.idNoticia] = n);
     } catch (err) {
-        cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+        cont.innerHTML = `<p class="text-danger">${escaparHtml(err.message)}</p>`;
     }
 }
 
@@ -214,7 +214,7 @@ async function cargarCirculares() {
         _circularesCache = {};
         circulares.forEach(c => _circularesCache[c.idCircular] = c);
     } catch (err) {
-        cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+        cont.innerHTML = `<p class="text-danger">${escaparHtml(err.message)}</p>`;
     }
 }
 

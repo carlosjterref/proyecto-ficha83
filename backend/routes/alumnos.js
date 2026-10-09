@@ -4,6 +4,7 @@ const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
 const { aEntero, puedeVerAlumno } = require('../middleware/permisos');
+const { sinMarcado, MENSAJE_MARCADO } = require('../middleware/validaciones');
 
 // GET /api/alumnos  — solo docentes
 router.get('/', verificarToken, soloRol('docente'), async (req, res) => {
@@ -43,6 +44,7 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
   if (!nombre || !apellido || !grado || !usuario || !contrasena) {
     return res.status(400).json({ mensaje: 'Faltan campos obligatorios.' });
   }
+  if (!sinMarcado(nombre, apellido, correo, usuario)) return res.status(400).json({ mensaje: MENSAJE_MARCADO });
 
   try {
     const hash = await bcrypt.hash(contrasena, 10);
@@ -62,6 +64,7 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
 // PUT /api/alumnos/:id  — solo docentes
 router.put('/:id', verificarToken, soloRol('docente'), async (req, res) => {
   const { nombre, apellido, grado, correo, usuario } = req.body;
+  if (!sinMarcado(nombre, apellido, correo, usuario)) return res.status(400).json({ mensaje: MENSAJE_MARCADO });
 
   try {
     const [resultado] = await db.query(

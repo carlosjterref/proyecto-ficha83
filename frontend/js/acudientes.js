@@ -86,9 +86,9 @@ async function cargarNotas() {
             const aprobado = n.calificacion >= 6;
             const color = aprobado ? 'var(--verde)' : '#c0392b';
             return `<tr>
-                <td>${n.materia}</td>
-                <td>${n.periodo}</td>
-                <td>${n.docente}</td>
+                <td>${escaparHtml(n.materia)}</td>
+                <td>${escaparHtml(n.periodo)}</td>
+                <td>${escaparHtml(n.docente)}</td>
                 <td><strong style="color:${color}">${Number(n.calificacion).toFixed(1)}</strong></td>
             </tr>`;
         }).join('');
@@ -110,7 +110,7 @@ async function cargarNotas() {
             <small class="text-muted">Escala: 1.0 — 10.0 | Aprobación: 6.0</small>
         `;
     } catch (err) {
-        cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+        cont.innerHTML = `<p class="text-danger">${escaparHtml(err.message)}</p>`;
     }
 }
 

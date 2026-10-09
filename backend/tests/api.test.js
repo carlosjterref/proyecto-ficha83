@@ -267,6 +267,31 @@ describe('Caso 9 - Validación de datos de entrada', () => {
     expect((await request(app).post('/api/circulares').set('Authorization', admin).send({ titulo: 'C', archivoUrl: 'javascript:alert(1)' })).status).toBe(400);
     expect((await request(app).put('/api/circulares/1').set('Authorization', admin).send({ titulo: 'C', archivoUrl: 'ftp://x/y' })).status).toBe(400);
   });
+
+  test('el registro público rechaza marcado HTML en nombres y datos de identidad (400)', async () => {
+    const xss = '<img src=x onerror=alert(1)>';
+    for (const cambios of [
+      { estudiante: { nombre: xss } }, { estudiante: { apellido: xss } }, { estudiante: { usuario: 'a<b>c' } },
+      { acudiente: { nombre: xss } }, { acudiente: { parentesco: xss } },
+    ]) {
+      const res = await registrar(cambios);
+      expect(res.status).toBe(400);
+      expect(res.body.mensaje).toMatch(/caracteres/i);
+    }
+  });
+
+  test('un docente no puede guardar marcado HTML en alumnos, docentes, acudientes ni materias (400)', async () => {
+    const docente = tokenDe('docente', 7), xss = '<script>alert(1)</script>';
+    const envia = (metodo, ruta, cuerpo) => request(app)[metodo](ruta).set('Authorization', docente).send(cuerpo);
+    expect((await envia('post', '/api/alumnos', { nombre: xss, apellido: 'A', grado: 6, usuario: 'u', contrasena: 'clave' })).status).toBe(400);
+    expect((await envia('put', '/api/alumnos/1', { nombre: 'Ana', apellido: xss })).status).toBe(400);
+    expect((await envia('post', '/api/docentes', { nombre: xss, usuario: 'u', contrasena: 'clave' })).status).toBe(400);
+    expect((await envia('put', '/api/docentes/1', { nombre: 'Luis', especialidad: xss })).status).toBe(400);
+    expect((await envia('post', '/api/acudientes', { nombre: xss, documento: '1', usuario: 'u', contrasena: 'clave', idAlumno: 1 })).status).toBe(400);
+    expect((await envia('put', '/api/acudientes/1', { nombre: 'Luz', parentesco: xss })).status).toBe(400);
+    expect((await envia('post', '/api/materias', { nombre: xss, grado: 6, idDocente: 7 })).status).toBe(400);
+    expect((await envia('put', '/api/materias/1', { nombre: xss })).status).toBe(400);
+  });
 });
 
 /* ---------------------------------------------------------------

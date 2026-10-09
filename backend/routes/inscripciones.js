@@ -2,7 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const db      = require('../config/db');
-const { texto, correo, enteroEnRango } = require('../middleware/validaciones');
+const { texto, correo, enteroEnRango, sinMarcado, MENSAJE_MARCADO } = require('../middleware/validaciones');
 
 // Longitud mínima de contraseña (la misma que exige el cambio de contraseña) y máxima
 // (bcrypt solo usa los primeros 72 caracteres).
@@ -34,6 +34,10 @@ router.post('/', async (req, res) => {
   }
   if (est.correo === null || acu.correo === null) {
     return res.status(400).json({ mensaje: 'El correo electrónico no es válido.' });
+  }
+  if (!sinMarcado(est.nombre, est.apellido, est.documento, est.correo, est.usuario,
+                  acu.nombre, acu.documento, acu.parentesco, acu.correo, acu.usuario)) {
+    return res.status(400).json({ mensaje: MENSAJE_MARCADO });
   }
   if (!claveValida(est.contrasena) || !claveValida(acu.contrasena)) {
     return res.status(400).json({ mensaje: `La contraseña debe tener entre ${CLAVE_MIN} y ${CLAVE_MAX} caracteres.` });

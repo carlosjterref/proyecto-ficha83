@@ -41,4 +41,11 @@ function numero(valor) {
   return Number.isFinite(n) ? n : null;
 }
 
-module.exports = { texto, correo, enteroEnRango, urlHttp, numero };
+// Verdadero si ninguno de los valores de texto contiene "<" ni ">": evita guardar marcado HTML
+// en nombres y datos de identidad. Los valores que no son texto (null, números) se ignoran.
+function sinMarcado(...valores) {
+  return valores.every(v => typeof v !== 'string' || !/[<>]/.test(v));
+}
+const MENSAJE_MARCADO = 'Los datos no pueden contener los caracteres < ni >.';
+
+module.exports = { texto, correo, enteroEnRango, urlHttp, numero, sinMarcado, MENSAJE_MARCADO };

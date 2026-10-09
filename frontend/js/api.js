@@ -119,7 +119,7 @@ async function cargarComunicadosEn(contId) {
       </div>
     `).join('');
   } catch (err) {
-    cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+    cont.innerHTML = `<p class="text-danger">${escaparHtml(err.message)}</p>`;
   }
 }
 
@@ -178,7 +178,7 @@ async function cargarMensajesEn(contId) {
 
     return mensajes;
   } catch (err) {
-    cont.innerHTML = `<p class="text-danger">${err.message}</p>`;
+    cont.innerHTML = `<p class="text-danger">${escaparHtml(err.message)}</p>`;
     return [];
   }
 }

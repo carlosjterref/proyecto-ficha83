@@ -3,6 +3,7 @@ const router  = express.Router();
 const db      = require('../config/db');
 const { verificarToken, soloRol } = require('../middleware/auth');
 const { aEntero, relacionConMateria, rechazarSiNoEsPropia } = require('../middleware/permisos');
+const { sinMarcado, MENSAJE_MARCADO } = require('../middleware/validaciones');
 
 // GET /api/materias  — todas las materias con nombre del docente
 router.get('/', verificarToken, async (req, res) => {
@@ -88,6 +89,7 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
   if (!nombre || !grado || !idDocente) {
     return res.status(400).json({ mensaje: 'Faltan campos obligatorios.' });
   }
+  if (!sinMarcado(nombre)) return res.status(400).json({ mensaje: MENSAJE_MARCADO });
 
   try {
     const [resultado] = await db.query(
@@ -103,6 +105,7 @@ router.post('/', verificarToken, soloRol('docente'), async (req, res) => {
 // PUT /api/materias/:id  — solo docentes
 router.put('/:id', verificarToken, soloRol('docente'), async (req, res) => {
   const { nombre, grado, idDocente } = req.body;
+  if (!sinMarcado(nombre)) return res.status(400).json({ mensaje: MENSAJE_MARCADO });
 
   try {
     const [resultado] = await db.query(
